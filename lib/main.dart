@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: ,
+    home: SpalshPage(),
   ));
 }
 class SpalshPage extends StatelessWidget {
@@ -12,7 +12,13 @@ class SpalshPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("Splash page"),
+        child: Container(
+          width: 250,
+          height: 250,
+          child: const Image(
+            image: AssetImage('assets/images/.png'),
+          ),
+        ),
       ),
     );
   }
