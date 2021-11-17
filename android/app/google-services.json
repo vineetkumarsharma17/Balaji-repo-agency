@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "404787619191",
+    "project_id": "balajirepo-a4074",
+    "storage_bucket": "balajirepo-a4074.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404787619191:android:dd8b0fa0615cab87182d72",
+        "android_client_info": {
+          "package_name": "com.example.balaji_repo_agency"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "404787619191-ic77lb86ajq72k2bbr39cdk90tgmnr87.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.balaji_repo_agency",
+            "certificate_hash": "10057adfb5860dcfa5160e41fa1f96e60abd078e"
+          }
+        },
+        {
+          "client_id": "404787619191-7u288l5civca9orl304560bv0o25jqrl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAygp1-rxx3Z9GUHEf72JCgdmcMg0Flq9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "404787619191-7u288l5civca9orl304560bv0o25jqrl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
