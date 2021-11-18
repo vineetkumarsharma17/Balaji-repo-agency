@@ -2,7 +2,9 @@
     package="com.example.balaji_repo_agency">
    <application
         android:label="balaji_repo_agency"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

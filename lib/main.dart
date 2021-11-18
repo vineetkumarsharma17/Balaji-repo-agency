@@ -1,12 +1,20 @@
 import 'dart:async';
 
+import 'package:balaji_repo_agency/screens/admin_panel.dart';
 import 'package:balaji_repo_agency/screens/mobile_login.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
-void main() {
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+//https://csvjson.com/csv2json
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: SpalshPage(),
+    // home: SpalshPage(),
+    home:
+    SpalshPage(),
   ));
 }
 class SpalshPage extends StatefulWidget {
@@ -15,15 +23,19 @@ class SpalshPage extends StatefulWidget {
   @override
   State<SpalshPage> createState() => _SpalshPageState();
 }
-
 class _SpalshPageState extends State<SpalshPage> {
   void initState() {
     super.initState();
     Timer(
         Duration(seconds: 2),
-            () {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginMobile()));
-          // check_if_already_login_faculty();
+            () async {
+              // SharedPreferences pref = await SharedPreferences.getInstance();
+              // if(pref.getBool("login")??false)
+              //   Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminPanel())).then((value) => Navigator.pop(context));
+              //   else
+              //   Navigator.push(context, MaterialPageRoute(builder:
+              //       (context)=>LoginMobile())).then((value) => Navigator.pop(context));
+              check_if_already();
 
         });
     // context, MaterialPageRoute(builder: (context) => DirectorLogIn())));
@@ -42,6 +54,18 @@ class _SpalshPageState extends State<SpalshPage> {
         ),
       ),
     );
+  }
+  void  check_if_already() async {
+    SharedPreferences ManagerLoginData = await SharedPreferences.getInstance();
+    bool loginstatus = await ManagerLoginData.getBool('login')??false;
+    if (loginstatus == true) {
+      Navigator.push(
+          context, new MaterialPageRoute(builder:
+          (context) => AdminPanel())).then((value) =>SystemNavigator.pop());
+    }
+    else
+      Navigator.push(context, MaterialPageRoute(builder:
+          (context)=>LoginMobile())).then((value) => SystemNavigator.pop());
   }
 }
 
