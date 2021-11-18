@@ -74,6 +74,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: TextFormField(
+                      keyboardType: TextInputType.phone,
                       style: TextStyle(color: Colors.white),
                       controller: otp,
                       decoration: InputDecoration(

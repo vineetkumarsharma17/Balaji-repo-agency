@@ -6,10 +6,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 }
 logoutActionButton(){
   return FloatingActionButton(
-    child: const Text("Log Out"),
+    child: Icon(Icons.logout),
       onPressed:()async{
    SharedPreferences preferences=await SharedPreferences.getInstance();
-   preferences.setBool("login", false);
+   preferences.setBool("login", true);
    exit(0);
   });
 }

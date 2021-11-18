@@ -1,5 +1,7 @@
+import 'package:balaji_repo_agency/component/alertdilog.dart';
 import 'package:balaji_repo_agency/screens/admin_panel.dart';
 import 'package:balaji_repo_agency/screens/verify_otp.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +18,8 @@ class _LoginMobileState extends State<LoginMobile> {
   TextEditingController mobile=TextEditingController();
   TextEditingController _codeController=TextEditingController();
   bool loading=true;
+  String? id,status;
+  CollectionReference phone = FirebaseFirestore.instance.collection('phone');
   FirebaseAuth auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
@@ -62,6 +66,7 @@ class _LoginMobileState extends State<LoginMobile> {
                     child: TextFormField(
                       style:const TextStyle(color: Colors.white),
                       controller: mobile,
+                      keyboardType: TextInputType.phone,
                       decoration: const InputDecoration(
                           icon: Icon(Icons.email_outlined,color: Colors.white,),
                           hintText: "Mobile",
@@ -81,7 +86,7 @@ class _LoginMobileState extends State<LoginMobile> {
                     setState(() {
                       loading=false;
                     });
-                      sendOTP();
+                      checkUser();
                     // }
                   }, child:const Text("Send OTP",style: TextStyle(
                     fontSize: 17
@@ -102,111 +107,41 @@ class _LoginMobileState extends State<LoginMobile> {
       ),
     );
   }
-/*  loginUser(String phone)async{
-    await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: phone,
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          await FirebaseAuth.instance
-              .signInWithCredential(credential)
-              .then((value) async {
-            if (value.user != null) {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
-                      (route) => false);
-            }
-          });
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          print(e.message);
-        },
-        codeSent: (String verficationID, int? resendToken) {
-          setState(() {
-            verficationID = verficationID;
-          });
-        },
-        codeAutoRetrievalTimeout: (String verificationID) {
-          setState(() {
-            _verificationCode = verificationID;
-          });
-        },
-        timeout: Duration(seconds: 120));
-  }*/
- /* Future loginUser(String phone) async{
-    print("=======================login"+phone);
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    _auth.verifyPhoneNumber(
-        phoneNumber: phone,
-        timeout:const Duration(seconds: 10),
-        verificationCompleted: (AuthCredential credential) async{
-          Navigator.of(context).pop();
-          await auth.signInWithCredential(credential);
-          final User? user = (await auth.signInWithCredential(credential)).user;
-          if(user != null){
-            Navigator.push(context, MaterialPageRoute(
-                builder: (context) =>const HomeScreen()
-            ));
-          }else{
-            print("Error");
-          }
-          //This callback would gets called when verification is done auto maticlly
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          if (e.code == 'invalid-phone-number') {
-            print('The provided phone number is not valid.');
-            print("=============================verified");
-            print(e);}
-        },
-        codeSent: (String verificationId, int? resendToken){
-          print("Send");
-          // showDialog(
-          //     context: context,
-          //     barrierDismissible: false,
-          //     builder: (context) {
-          //       return AlertDialog(
-          //         title: Text("Give the code?"),
-          //         content: Column(
-          //           mainAxisSize: MainAxisSize.min,
-          //           children: <Widget>[
-          //             TextField(
-          //               controller: _codeController,
-          //             ),
-          //           ],
-          //         ),
-          //         actions: <Widget>[
-          //           FlatButton(
-          //             child: Text("Confirm"),
-          //             textColor: Colors.white,
-          //             color: Colors.blue,
-          //             onPressed: () async{
-          //               final code = _codeController.text.trim();
-          //               PhoneAuthCredential credential = PhoneAuthProvider.credential(
-          //                   verificationId: verificationId, smsCode: code);
-          //               await auth.signInWithCredential(credential);
-          //               final User? user = (await auth.signInWithCredential(credential)).user;
-          //               if(user != null){
-          //                 Navigator.push(context, MaterialPageRoute(
-          //                     builder: (context) => HomeScreen()
-          //                 ));
-          //               }else{
-          //                 print("Error");
-          //               }
-          //             },
-          //           )
-          //         ],
-          //       );
-          //     }
-          // );
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          print("=============================timeout");
-          print("Timeout");
-        },
-    );
-  }*/
+  void checkUser()async{
+    await phone
+        .where('number', isEqualTo: mobile.text)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+          print(querySnapshot.toString());
+          loading=!loading;
+      // querySnapshot.docs.forEach((doc) {
+      //   id = doc.id;
+      //   Map<String, dynamic> data =
+      //   doc.data()! as Map<String, dynamic>;
+      //   status = data['status'];
+      //   print("this is status ${status}");
+      //   print(id);
+      // });
+    });
+    // if (status == "true") {
+    //   phone
+    //       .doc(id)
+    //       .get()
+    //       .then((DocumentSnapshot documentSnapshot) {
+    //     if (documentSnapshot.exists) {
+    //       showMyDialog("Success", "Authorised", context);
+    //     } else {
+    //       // Navigator.push(context,
+    //       // MaterialPageRoute(builder: (context) => Home()));
+    //     }
+    //   });
+    // } else {
+    //   showMyDialog("fail", "unAuthorised", context);
+    // }
+  }
   void sendOTP()async{
       auth.verifyPhoneNumber(
-      phoneNumber: '+918874327867',
+      phoneNumber: '+91'+mobile.text,
         verificationCompleted: (PhoneAuthCredential credential) async {
           await auth.signInWithCredential(credential);
           SharedPreferences prefs = await SharedPreferences.getInstance();

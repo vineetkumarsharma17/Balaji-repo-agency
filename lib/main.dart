@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //https://csvjson.com/csv2json
+// https://beautifytools.com/excel-to-sql-converter.php
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -28,7 +29,7 @@ class _SpalshPageState extends State<SpalshPage> {
     super.initState();
     Timer(
         Duration(seconds: 2),
-            () async {
+            (){
               // SharedPreferences pref = await SharedPreferences.getInstance();
               // if(pref.getBool("login")??false)
               //   Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminPanel())).then((value) => Navigator.pop(context));
@@ -57,8 +58,10 @@ class _SpalshPageState extends State<SpalshPage> {
   }
   void  check_if_already() async {
     SharedPreferences ManagerLoginData = await SharedPreferences.getInstance();
-    bool loginstatus = await ManagerLoginData.getBool('login')??false;
-    if (loginstatus == true) {
+    print("data=============");
+    print(await ManagerLoginData.getBool('login'));
+    bool loginstatus = await ManagerLoginData.getBool('login')??true;
+    if (loginstatus == false) {
       Navigator.push(
           context, new MaterialPageRoute(builder:
           (context) => AdminPanel())).then((value) =>SystemNavigator.pop());
