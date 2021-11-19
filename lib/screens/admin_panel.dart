@@ -16,15 +16,18 @@ class AdminPanel extends StatefulWidget {
 class _AdminPanelState extends State<AdminPanel> {
   CollectionReference phone = FirebaseFirestore.instance.collection('phone');
   FilePickerResult? result;
+  String mobile='';
   bool loading=true;
 var id;
 String? status;
-  var mobile=TextEditingController();
   var cmobile=TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar("Admin Panel"),
+      appBar: AppBar(
+        title: Text("Admin Panel"),
+        automaticallyImplyLeading: false,
+      ),
       body: Container(
         decoration: const BoxDecoration(
             image: DecorationImage(
@@ -44,9 +47,9 @@ String? status;
             ),
             child: Column(
               children: [
-                Center(
+                const Center(
                   heightFactor: 3,
-                  child: Text("Welcome!",style: TextStyle(
+                  child: Text("Welcome Admin",style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
                       color: Colors.deepPurple
@@ -64,7 +67,8 @@ String? status;
                       padding: const EdgeInsets.only(left: 8.0),
                       child: TextFormField(
                         style:const TextStyle(color: Colors.white),
-                        controller: mobile,
+                        controller: cmobile,
+                        onChanged: (val)=>mobile=val,
                         decoration: const InputDecoration(
                             icon: Icon(Icons.email_outlined,color: Colors.white,),
                             hintText: "Mobile",
@@ -78,99 +82,91 @@ String? status;
                 ):Container(
                     child: const CircularProgressIndicator()),
                 const SizedBox(height: 10,),
-                ElevatedButton(onPressed: (){
-                  //  Navigator.push(context, MaterialPageRoute(builder: (context)=>()));
-                  //   if(mobile.text.isNotEmpty){
-                  print("clicked");
-                  setState(() {
-                    loading=false;
-                  });
-                  addPhoneNumber(mobile.text);
-                  // }
-                }, child:const Text("Invite User",style: TextStyle(
-                    fontSize: 17
-                ),),
-                  style: ButtonStyle(
-                      minimumSize: MaterialStateProperty.all(Size(120, 40)),
-                      backgroundColor: MaterialStateProperty.all(Colors.teal),
-                      shape:MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius:BorderRadius.circular(20),
-                          side: BorderSide.none
-                      ))
-                  ),),
-               Container(
-                  margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width*.1),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.teal,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: TextFormField(
-                        style:const TextStyle(color: Colors.white),
-                        controller: cmobile,
-                        decoration: const InputDecoration(
-                            icon: Icon(Icons.email_outlined,color: Colors.white,),
-                            hintText: "Mobile",
-                            hintStyle: TextStyle(
-                                color: Colors.white70
-                            ),
-                            border: InputBorder.none
-                        ),
-                      )
-                  ),
-                ),
-                const SizedBox(height: 10,),
-                ElevatedButton(onPressed: (){
-                  //  Navigator.push(context, MaterialPageRoute(builder: (context)=>()));
-                  //   if(mobile.text.isNotEmpty){
-                  print("clicked");
-                  setState(() {
-                    loading=false;
-                  });
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(onPressed: (){
+                      if(validate()) {
+                        setState(() {
+                          loading=false;
+                        });
+                        addPhoneNumber();
+                      }
+                      // setState(() {
+                      //   loading=false;
+                      // });
+                      // addPhoneNumber(mobile!);
+
+                    }, child:const Text("Invite User",style: TextStyle(
+                        fontSize: 17
+                    ),),
+                      style: buttonStyle(),),
+                    ElevatedButton(onPressed: (){
                   checkstatus();
-                  // }
-                }, child:const Text("check status",style: TextStyle(
-                    fontSize: 17
-                ),),
-                  style: ButtonStyle(
-                      minimumSize: MaterialStateProperty.all(Size(120, 40)),
-                      backgroundColor: MaterialStateProperty.all(Colors.teal),
-                      shape:MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius:BorderRadius.circular(20),
-                          side: BorderSide.none
-                      ))
-                  ),),
+                    }, child:const Text("check",style: TextStyle(
+                        fontSize: 17
+                    ),),
+                      style: buttonStyle(),),
+                    ElevatedButton(onPressed: (){
+                      blockUser();
+                    }, child:const Text("Block",style: TextStyle(
+                        fontSize: 17
+                    ),),
+                      style: buttonStyle(),),
+                  ],
+                ),
+
               ],
             ),
 
           ),
         ),
       ),
-      floatingActionButton: logoutActionButton(),
+      floatingActionButton: logoutActionButton(context),
     );
   }
-  Future<void> addPhoneNumber(String num) {
+  Future<void> addPhoneNumber() {
     return phone
         .add({
-      'number': num, // John Doe
+      'number': mobile, // John Doe
       'status': "true", // Stokes and Sons
-    })
-        .then((value) {
+    }).then((value) {
           setState(() {
             loading=!loading;
+            cmobile.clear();
           });
-          return showMyDialog("Success", "Addedd", context);})
+          return showSnackBar("Invited SuccessFully!", context);})
         .catchError((error) {
       setState(() {
         loading=!loading;
+        cmobile.clear();
       });
       print(error.toString());
       return showMyDialog("Error", error.toString(), context);}  );
   }
   checkstatus()async{
-    print("chek status");
 
+    setState(() {
+      loading=true;
+      showSnackBar("This function is under development!", context);
+    });
 }
+bool validate(){
+    if(mobile.isEmpty) {
+      showSnackBar("Empty Mobile", context);
+      return false;
+    }else
+    if(mobile.length!=10){
+      showSnackBar("Invalid mobile number!", context);
+      return false;
+    }
+    return true;
+}
+
+  void blockUser() {
+    setState(() {
+      loading=true;
+      showSnackBar("This function is under development!", context);
+    });
+  }
   }

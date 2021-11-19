@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:balaji_repo_agency/screens/admin_panel.dart';
+import 'package:balaji_repo_agency/screens/home_screen.dart';
 import 'package:balaji_repo_agency/screens/mobile_login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MaterialApp(
+  runApp( MaterialApp(
+    theme: ThemeData(
+      scaffoldBackgroundColor: Colors.white,
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.teal
+      )
+    ),
     debugShowCheckedModeBanner: false,
     // home: SpalshPage(),
     home:
@@ -30,16 +37,8 @@ class _SpalshPageState extends State<SpalshPage> {
     Timer(
         Duration(seconds: 2),
             (){
-              // SharedPreferences pref = await SharedPreferences.getInstance();
-              // if(pref.getBool("login")??false)
-              //   Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminPanel())).then((value) => Navigator.pop(context));
-              //   else
-              //   Navigator.push(context, MaterialPageRoute(builder:
-              //       (context)=>LoginMobile())).then((value) => Navigator.pop(context));
               check_if_already();
-
         });
-    // context, MaterialPageRoute(builder: (context) => DirectorLogIn())));
   }
 
   @override
@@ -57,18 +56,30 @@ class _SpalshPageState extends State<SpalshPage> {
     );
   }
   void  check_if_already() async {
-    SharedPreferences ManagerLoginData = await SharedPreferences.getInstance();
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     print("data=============");
-    print(await ManagerLoginData.getBool('login'));
-    bool loginstatus = await ManagerLoginData.getBool('login')??true;
+    print(await preferences.getBool('login'));
+    bool loginstatus = await preferences.getBool('login')??true;
     if (loginstatus == false) {
-      Navigator.push(
-          context, new MaterialPageRoute(builder:
-          (context) => AdminPanel())).then((value) =>SystemNavigator.pop());
+      if (preferences.getString("type") == "admin") {
+        Navigator.push(
+            context, MaterialPageRoute(builder:
+            (context) => const AdminPanel())).then((value) =>
+            SystemNavigator.pop());
+      } else if (preferences.getString("type") == "user") {
+        Navigator.push(
+            context, MaterialPageRoute(builder:
+            (context) => const HomeScreen())).then((value) =>
+            SystemNavigator.pop());
+      } else {
+        Navigator.push(context, MaterialPageRoute(builder:
+            (context) => LoginMobile())).then((value) => SystemNavigator.pop());
+      }
     }
-    else
+    else {
       Navigator.push(context, MaterialPageRoute(builder:
           (context)=>LoginMobile())).then((value) => SystemNavigator.pop());
+    }
   }
 }
 

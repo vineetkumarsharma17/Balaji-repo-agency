@@ -1,32 +1,42 @@
+import 'package:balaji_repo_agency/component/component.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'admin_panel.dart';
+import 'home_screen.dart';
 class VerifyOTP extends StatefulWidget {
-  final  verificationId;
-  const VerifyOTP({Key? key, this.verificationId}) : super(key: key);
+  final  verificationId,status;
+  const VerifyOTP({Key? key, this.verificationId, this.status}) : super(key: key);
 
   @override
-  _VerifyOTPState createState() => _VerifyOTPState(verificationId);
+  _VerifyOTPState createState() => _VerifyOTPState(verificationId,status);
 }
 class _VerifyOTPState extends State<VerifyOTP> {
-  final verificationId;
-  _VerifyOTPState(this.verificationId);
+  final verificationId,status;
+  _VerifyOTPState(this.verificationId, this.status);
   TextEditingController otp=TextEditingController();
   FirebaseAuth auth = FirebaseAuth.instance;
+  bool loading=true;
   void verifyOTP()async {
     print("verify with"+otp.text);
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId, smsCode: otp.text);
     try{
-      await auth.signInWithCredential(credential);
+      // await auth.signInWithCredential(credential);
       final User? user = (await auth.signInWithCredential(credential)).user;
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setBool('login',false);
-      Navigator.push(context, MaterialPageRoute(builder:
-          (context)=>const AdminPanel())).then((value) => SystemNavigator.pop());
+      if(status=="admin") {
+        prefs.setString('type',"admin");
+        Navigator.push(context, MaterialPageRoute(builder:
+            (context)=>const AdminPanel())).then((value) => SystemNavigator.pop());
+      } else {
+        prefs.setString('type',"user");
+        Navigator.push(context, MaterialPageRoute(builder:
+            (context)=>const HomeScreen())).then((value) => SystemNavigator.pop());
+      }
       print("Successfully signed in UID: ${user!.uid}");
     }catch (e) {
       print("Failed to sign in: " + e.toString());
@@ -48,7 +58,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
         child: SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*.4,),
-            //  height: MediaQuery.of(context).size.height*.7,
+            width: double.infinity,
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(40),
@@ -64,7 +74,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                       color: Colors.deepPurple
                   ),),
                 ),
-                Container(
+               loading?Container(
                   margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width*.1),
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -87,7 +97,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                       ),
                     ),
                   ),
-                ),
+                ):CircularProgressIndicator(),
                 SizedBox(height: 10,),
                 ElevatedButton(onPressed: (){
                   //  Navigator.push(context, MaterialPageRoute(builder: (context)=>()));
@@ -98,14 +108,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                 }, child: Text("Verify",style: TextStyle(
                     fontSize: 17
                 ),),
-                  style: ButtonStyle(
-                      minimumSize: MaterialStateProperty.all(Size(120, 40)),
-                      backgroundColor: MaterialStateProperty.all(Colors.teal),
-                      shape:MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius:BorderRadius.circular(20),
-                          side: BorderSide.none
-                      ))
-                  ),),
+                  style:buttonStyle()),
               ],
             ),
 

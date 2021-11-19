@@ -1,4 +1,5 @@
 import 'package:balaji_repo_agency/component/alertdilog.dart';
+import 'package:balaji_repo_agency/component/component.dart';
 import 'package:balaji_repo_agency/screens/admin_panel.dart';
 import 'package:balaji_repo_agency/screens/verify_otp.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -83,22 +84,20 @@ class _LoginMobileState extends State<LoginMobile> {
                 //  Navigator.push(context, MaterialPageRoute(builder: (context)=>()));
                 //   if(mobile.text.isNotEmpty){
                     print("clicked");
-                    setState(() {
-                      loading=false;
-                    });
-                      checkUser();
+                    if(validate())
+                      {
+                        setState(() {
+                          loading=false;
+                        });
+                        checkUser();
+                      }
                     // }
                   }, child:const Text("Send OTP",style: TextStyle(
                     fontSize: 17
                 ),),
-                  style: ButtonStyle(
-                      minimumSize: MaterialStateProperty.all(Size(120, 40)),
-                      backgroundColor: MaterialStateProperty.all(Colors.teal),
-                      shape:MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius:BorderRadius.circular(20),
-                          side: BorderSide.none
-                      ))
-                  ),),
+                  style: buttonStyle()
+
+                ),
               ],
             ),
 
@@ -108,36 +107,45 @@ class _LoginMobileState extends State<LoginMobile> {
     );
   }
   void checkUser()async{
+    status="false";
     await phone
         .where('number', isEqualTo: mobile.text)
         .get()
         .then((QuerySnapshot querySnapshot) {
           print(querySnapshot.toString());
-          loading=!loading;
-      // querySnapshot.docs.forEach((doc) {
-      //   id = doc.id;
-      //   Map<String, dynamic> data =
-      //   doc.data()! as Map<String, dynamic>;
-      //   status = data['status'];
-      //   print("this is status ${status}");
-      //   print(id);
-      // });
+          // setState(() {
+          //   loading=!loading;
+          // });
+      querySnapshot.docs.forEach((doc) {
+        id = doc.id;
+        Map<String, dynamic> data =
+        doc.data()! as Map<String, dynamic>;
+        status = data['status'];
+        print("this is status ${status}");
+        print(id);
+      });
     });
-    // if (status == "true") {
-    //   phone
-    //       .doc(id)
-    //       .get()
-    //       .then((DocumentSnapshot documentSnapshot) {
-    //     if (documentSnapshot.exists) {
-    //       showMyDialog("Success", "Authorised", context);
-    //     } else {
-    //       // Navigator.push(context,
-    //       // MaterialPageRoute(builder: (context) => Home()));
-    //     }
-    //   });
-    // } else {
-    //   showMyDialog("fail", "unAuthorised", context);
-    // }
+    if (status == "true"||status=="admin") {
+      phone
+          .doc(id)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          sendOTP();
+          // showMyDialog("Success", "Authorised", context);
+        } else {
+          print("not exist");
+          // Navigator.push(context,
+          // MaterialPageRoute(builder: (context) => Home()));
+        }
+      });
+    } else {
+      setState(() {
+        loading=true;
+      });
+      showMyDialog("Failed", "your are not authorized to user this app.Contact to sumit tiwari",
+          context);
+    }
   }
   void sendOTP()async{
       auth.verifyPhoneNumber(
@@ -146,8 +154,16 @@ class _LoginMobileState extends State<LoginMobile> {
           await auth.signInWithCredential(credential);
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool('login',false);
-          Navigator.push(context, MaterialPageRoute(builder:
+
+          if(status=="admin") {
+            prefs.setString('type',"admin");
+            Navigator.push(context, MaterialPageRoute(builder:
               (context)=>const AdminPanel())).then((value) => SystemNavigator.pop());
+          } else {
+            prefs.setString('type',"user");
+            Navigator.push(context, MaterialPageRoute(builder:
+                (context)=>const HomeScreen())).then((value) => SystemNavigator.pop());
+          }
         },
       verificationFailed: (FirebaseAuthException e) {
         loading=true;
@@ -161,12 +177,24 @@ class _LoginMobileState extends State<LoginMobile> {
         print("code sent to "+mobile.text);
         print(verificationId);
         Navigator.push(context, MaterialPageRoute(builder:
-            (context)=>VerifyOTP(verificationId: verificationId,)));
+            (context)=>VerifyOTP(verificationId: verificationId,status: status,)));
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         print("=============================timeout");
         print("Timeout");
       },
     );
+  }
+  bool validate(){
+    String mobile=this.mobile.text;
+    if(mobile.isEmpty) {
+      showSnackBar("Empty Mobile", context);
+      return false;
+    }else
+    if(mobile.length!=10){
+      showSnackBar("Invalid mobile number!", context);
+      return false;
+    }
+    return true;
   }
 }
