@@ -77,7 +77,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                       keyboardType: TextInputType.phone,
                       style: TextStyle(color: Colors.white),
                       controller: otp,
-                      decoration: InputDecoration(
+                      decoration:const InputDecoration(
                           icon: Icon(Icons.email_outlined,color: Colors.white,),
                           hintText: "OTP",
                           hintStyle: TextStyle(
