@@ -17,7 +17,7 @@ class _AdminPanelState extends State<AdminPanel> {
   String mobile='';
   bool loading=true;
 var id;
-String? status;
+String status="false";
   var cmobile=TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -64,6 +64,7 @@ String? status;
                   child: Padding(
                       padding: const EdgeInsets.only(left: 8.0),
                       child: TextFormField(
+                        keyboardType: TextInputType.phone,
                         style:const TextStyle(color: Colors.white),
                         controller: cmobile,
                         onChanged: (val)=>mobile=val,
@@ -84,6 +85,7 @@ String? status;
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(onPressed: (){
+                      mobile=cmobile.text;
                       if(validate()) {
                         setState(() {
                           loading=false;
@@ -106,7 +108,7 @@ String? status;
                     ),),
                       style: buttonStyle(),),
                     ElevatedButton(onPressed: (){
-                      // blockUser(id);
+                      blockUser();
                     }, child:const Text("Block",style: TextStyle(
                         fontSize: 17
                     ),),
@@ -122,9 +124,10 @@ String? status;
       floatingActionButton: logoutActionButton(context),
     );
   }
- addPhoneNumber() {
-   status = userStatus(mobile);
-   if (status == "false") {
+ addPhoneNumber()async {
+    mobile=cmobile.text;
+   status =await userStatus(mobile) as String;
+    if (status == "false") {
      phone
          .add({
        'number': mobile, // John Doe
@@ -132,7 +135,6 @@ String? status;
      }).then((value) {
        setState(() {
          loading = !loading;
-         cmobile.clear();
        });
        showSnackBar("Invited SuccessFully!", context);
      })
@@ -145,32 +147,43 @@ String? status;
        showMyDialog("Error", error.toString(), context);
      });
    }
-   else
-     showSnackBar("This number is already addedd.", context);
+   else {
+      setState(() {
+        loading = !loading;
+      });
+      showSnackBar("This number is already addedd.", context);
+    }
  }
   checkstatus()async{
+    mobile=cmobile.text;
+    status =await userStatus(mobile) as String;
     if (status == "true"||status=="admin") {
-      phone
-          .doc(id)
-          .get()
-          .then((DocumentSnapshot documentSnapshot) {
-        if (documentSnapshot.exists) {
-          setState(() {
-            loading=true;
-          });
-          showSnackBar("This number is authorized", context);
-          // showMyDialog("Success", "Authorised", context);
-        } else {
-          print("not exist");
-          // Navigator.push(context,
-          // MaterialPageRoute(builder: (context) => Home()));
-        }
+      setState(() {
+        loading=true;
       });
+      String msg="This user is  authorized to use this app";
+      showSnackBar(msg,context);
+      // phone
+      //     .doc(id)
+      //     .get()
+      //     .then((DocumentSnapshot documentSnapshot) {
+      //   if (documentSnapshot.exists) {
+      //     setState(() {
+      //       loading=true;
+      //     });
+      //     showSnackBar("This number is authorized", context);
+      //     // showMyDialog("Success", "Authorised", context);
+      //   } else {
+      //     print("not exist");
+      //     // Navigator.push(context,
+      //     // MaterialPageRoute(builder: (context) => Home()));
+      //   }
+      // });
     } else {
       setState(() {
         loading=true;
       });
-      String msg="This app is not authorized to use this app\nDo you want to authorized";
+      String msg="This User is not authorized to use this app\nDo you want to authorized";
       AddUserDialog("Not Authorized",msg,mobile,context);
     }
 }
@@ -187,6 +200,9 @@ bool validate(){
 }
 
   void blockUser() async{
+    setState(() {
+      loading=false;
+    });
     status="false";
     await phone
         .where('number', isEqualTo: mobile)
@@ -215,7 +231,7 @@ bool validate(){
       loading=true;
     });
   }
- userStatus(String mobile)async{
+ Future<String> userStatus(String mobile)async{
     status="false";
     await phone
         .where('number', isEqualTo: mobile)
@@ -227,8 +243,8 @@ bool validate(){
         Map<String, dynamic> data =
         doc.data()! as Map<String, dynamic>;
         status = data['status'];
-        print("this is status ${status}");
         print(id);
+        print("status=$data");
       });
     }).catchError((e){
       showSnackBar(e.toString(), context);

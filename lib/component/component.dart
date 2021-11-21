@@ -20,7 +20,7 @@ showSnackBar(msg,context){
      shape: RoundedRectangleBorder(
        borderRadius: BorderRadius.circular(10.0),
      ),
-     duration: const Duration(milliseconds: 1000),
+     duration: const Duration(milliseconds: 2000),
    ));
 }
 buttonStyle(){
@@ -92,15 +92,38 @@ Future<void> showDataDialog(String msg,String detail,BuildContext context) async
   );
 }
 openwhatsapp(String msg,context) async{
-  var whatsapp ="+919369640153";
+  // var whatsapp = "+919369640153";
   var whatsappURl_android = "whatsapp://send?&text=$msg";
-  // var whatappURL_ios ="https://wa.me/$whatsapp?text=${Uri.parse(msg)}";
-  if( await canLaunch(whatsappURl_android)){
-    await launch(whatsappURl_android);
-  }else{
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: new Text("whatsapp no installed")));
-  }
+   showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text("Open  Whatsapp"),
+        content: Text("Do you want share on whatsapp ?"),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('No'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Yes'),
+            onPressed: () async {
+              if (await canLaunch(whatsappURl_android)) {
+                await launch(whatsappURl_android);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: new Text("whatsapp no installed")));
+              }
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
 Future<void> AddUserDialog( msg, detail,mobile, context) async {
   return showDialog<void>(
@@ -129,19 +152,20 @@ Future<void> AddUserDialog( msg, detail,mobile, context) async {
     },
   );
 }
- addPhoneNumber(mobile,context) {
+ addPhoneNumber(mobile,context){
    CollectionReference phone = FirebaseFirestore.instance.collection('phone');
-   phone
-      .add({
-    'number': mobile, // John Doe
-    'status': "true", // Stokes and Sons
-  }).then((value) {
-     showSnackBar("Invited SuccessFully!", context);
+   phone.add({
+     'number': mobile, // John Doe
+     'status': "true", // Stokes and Sons
+   }).then((value) {
      Navigator.of(context).pop();
-  }
-   )
-      .catchError((error) {
-    print(error.toString());
-    Navigator.of(context).pop();
-    return showMyDialog("Error", error.toString(), context);}  );
-}
+     showSnackBar("Invited SuccessFully!", context);
+     String msg = "I Invite you on balaji repo agency app";
+     openwhatsapp(msg, context);
+     // Navigator.of(context).pop();
+   }).catchError((error) {
+     print(error.toString());
+     Navigator.of(context).pop();
+     return showMyDialog("Error", error.toString(), context);
+   });
+ }

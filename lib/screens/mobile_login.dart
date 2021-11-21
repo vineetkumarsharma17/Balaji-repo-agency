@@ -109,14 +109,12 @@ class _LoginMobileState extends State<LoginMobile> {
   }
   void checkUser()async{
     status="false";
+    print(mobile.text);
     await phone
         .where('number', isEqualTo: mobile.text)
         .get()
         .then((QuerySnapshot querySnapshot) {
-          print(querySnapshot.toString());
-          // setState(() {
-          //   loading=!loading;
-          // });
+          print(querySnapshot.docs.toString());
       querySnapshot.docs.forEach((doc) {
         id = doc.id;
         Map<String, dynamic> data =
