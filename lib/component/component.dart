@@ -53,7 +53,7 @@ Future<void> showExitDialog(String msg,String detail,BuildContext context) async
             onPressed: () async {
               SharedPreferences preferences=await SharedPreferences.getInstance();
               preferences.setBool("login", true);
-              showSnackBar("Logout successfully!",context);
+              showSnackBar("Thanks for using our app\nThis app is developed by Vineet Kumar Sharma",context);
               Navigator.of(context).pop();
              // exit(0);
             },
@@ -82,8 +82,8 @@ Future<void> showDataDialog(String msg,String detail,BuildContext context) async
             child: const Text('Share'),
             onPressed: () async {
               print("clicked");
-              openwhatsapp(detail, context);
               Navigator.of(context).pop();
+              openwhatsapp(detail, context);
             },
           ),
         ],
@@ -92,6 +92,7 @@ Future<void> showDataDialog(String msg,String detail,BuildContext context) async
   );
 }
 openwhatsapp(String msg,context) async{
+
   // var whatsapp = "+919369640153";
   var whatsappURl_android = "whatsapp://send?&text=$msg";
    showDialog<void>(
@@ -145,6 +146,7 @@ Future<void> AddUserDialog( msg, detail,mobile, context) async {
             onPressed: () async {
               print("clicked");
               addPhoneNumber(mobile, context);
+              // Navigator.of(context).pop();
             },
           ),
         ],
@@ -160,7 +162,7 @@ Future<void> AddUserDialog( msg, detail,mobile, context) async {
    }).then((value) {
      Navigator.of(context).pop();
      showSnackBar("Invited SuccessFully!", context);
-     String msg = "I Invite you on balaji repo agency app";
+     String msg = "I Invited you on balaji repo agency app.Download our app from https://github.com/vineetkumarsharma17";
      openwhatsapp(msg, context);
      // Navigator.of(context).pop();
    }).catchError((error) {

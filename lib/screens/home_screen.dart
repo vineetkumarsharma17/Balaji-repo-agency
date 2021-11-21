@@ -29,8 +29,12 @@ class _HomeScreenState extends State<HomeScreen> {
         Uri.parse(
             "http://vkwilson.live/getdata.php"),
         body: json.encode(data)).catchError((e){
+      setState(() {
+        loading=true;
+      });
       if(e is SocketException)
-        showSnackBar("No internet connection", context);
+        return showSnackBar("No internet connection", context);
+
     });
     var obj = jsonDecode(response.body);
     if(obj["status"]==1){
@@ -48,8 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
     else{
       showSnackBar("No data found", context);
     }
-
     setState(() {
+      rc_number.clear();
       loading=true;
     });
   }

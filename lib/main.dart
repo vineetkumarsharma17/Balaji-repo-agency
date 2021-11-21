@@ -21,8 +21,8 @@ void main() async{
     ),
     debugShowCheckedModeBanner: false,
     // home: SpalshPage(),
-    // home: SpalshPage(),
-    home: AdminPanel(),
+    home: SpalshPage(),
+    // home: AdminPanel(),
   ));
 }
 class SpalshPage extends StatefulWidget {
