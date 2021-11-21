@@ -122,42 +122,33 @@ String? status;
       floatingActionButton: logoutActionButton(context),
     );
   }
-  Future<void> addPhoneNumber() {
-    return phone
-        .add({
-      'number': mobile, // John Doe
-      'status': "true", // Stokes and Sons
-    }).then((value) {
-          setState(() {
-            loading=!loading;
-            cmobile.clear();
-          });
-
-          return showSnackBar("Invited SuccessFully!", context);})
-        .catchError((error) {
-      setState(() {
-        loading=!loading;
-        cmobile.clear();
-      });
-      print(error.toString());
-      return showMyDialog("Error", error.toString(), context);}  );
-  }
+ addPhoneNumber() {
+   status = userStatus(mobile);
+   if (status == "false") {
+     phone
+         .add({
+       'number': mobile, // John Doe
+       'status': "true", // Stokes and Sons
+     }).then((value) {
+       setState(() {
+         loading = !loading;
+         cmobile.clear();
+       });
+       showSnackBar("Invited SuccessFully!", context);
+     })
+         .catchError((error) {
+       setState(() {
+         loading = !loading;
+         cmobile.clear();
+       });
+       print(error.toString());
+       showMyDialog("Error", error.toString(), context);
+     });
+   }
+   else
+     showSnackBar("This number is already addedd.", context);
+ }
   checkstatus()async{
-    status="false";
-    await phone
-        .where('number', isEqualTo: mobile)
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      // print(querySnapshot.toString());
-      querySnapshot.docs.forEach((doc) {
-        id = doc.id;
-        Map<String, dynamic> data =
-        doc.data()! as Map<String, dynamic>;
-        status = data['status'];
-        print("this is status ${status}");
-        print(id);
-      });
-    });
     if (status == "true"||status=="admin") {
       phone
           .doc(id)
@@ -195,11 +186,53 @@ bool validate(){
     return true;
 }
 
-  void blockUser(id) {
-     phone
-        .doc(id)
-        .update({'status': 'true'})
-        .then((value) => showSnackBar("Blocked Successfully", context))
-        .catchError((error) => print("Failed to update user: $error"));
+  void blockUser() async{
+    status="false";
+    await phone
+        .where('number', isEqualTo: mobile)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      // print(querySnapshot.toString());
+      querySnapshot.docs.forEach((doc) {
+        id = doc.id;
+        Map<String, dynamic> data =
+        doc.data()! as Map<String, dynamic>;
+        status = data['status'];
+        print("this is status ${status}");
+        print(id);
+      });
+    });
+    if(status=="true"){
+      phone
+          .doc(id)
+          .delete()
+          .then((value) => showSnackBar("Blocked Successfully", context))
+          .catchError((error) => showSnackBar("Error=$error", context));
+    }
+    else
+      showSnackBar("User not found", context);
+    setState(() {
+      loading=true;
+    });
+  }
+ userStatus(String mobile)async{
+    status="false";
+    await phone
+        .where('number', isEqualTo: mobile)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      // print(querySnapshot.toString());
+      querySnapshot.docs.forEach((doc) {
+        id = doc.id;
+        Map<String, dynamic> data =
+        doc.data()! as Map<String, dynamic>;
+        status = data['status'];
+        print("this is status ${status}");
+        print(id);
+      });
+    }).catchError((e){
+      showSnackBar(e.toString(), context);
+    });
+    return status;
   }
   }
