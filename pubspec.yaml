@@ -36,9 +36,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_auth: ^3.2.0
   firebase_core: ^1.10.0
-  file_picker: ^4.2.3
   shared_preferences: ^2.0.8
   firebase_database: ^8.1.0
+  http: ^0.13.3
+  url_launcher: ^6.0.15
   cloud_firestore: ^3.1.0
 
 dev_dependencies:

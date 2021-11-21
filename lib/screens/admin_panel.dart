@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:balaji_repo_agency/component/alertdilog.dart';
 import 'package:balaji_repo_agency/component/component.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 class AdminPanel extends StatefulWidget {
@@ -15,7 +14,6 @@ class AdminPanel extends StatefulWidget {
 
 class _AdminPanelState extends State<AdminPanel> {
   CollectionReference phone = FirebaseFirestore.instance.collection('phone');
-  FilePickerResult? result;
   String mobile='';
   bool loading=true;
 var id;
@@ -38,7 +36,7 @@ String? status;
         child: SingleChildScrollView(
           child: Container(
             width: double.infinity,
-            margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*.4,),
+            margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*.3,),
             //  height: MediaQuery.of(context).size.height*.7,
             decoration: const BoxDecoration(
                 color: Colors.white,
@@ -82,8 +80,8 @@ String? status;
                 ):Container(
                     child: const CircularProgressIndicator()),
                 const SizedBox(height: 10,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(onPressed: (){
                       if(validate()) {
@@ -92,23 +90,23 @@ String? status;
                         });
                         addPhoneNumber();
                       }
-                      // setState(() {
-                      //   loading=false;
-                      // });
-                      // addPhoneNumber(mobile!);
-
                     }, child:const Text("Invite User",style: TextStyle(
                         fontSize: 17
                     ),),
                       style: buttonStyle(),),
                     ElevatedButton(onPressed: (){
-                  checkstatus();
-                    }, child:const Text("check",style: TextStyle(
+                      if(validate()) {
+                        setState(() {
+                          loading=false;
+                        });
+                        checkstatus();
+                      }
+                    }, child:const Text("Check Mobile Status",style: TextStyle(
                         fontSize: 17
                     ),),
                       style: buttonStyle(),),
                     ElevatedButton(onPressed: (){
-                      blockUser();
+                      // blockUser(id);
                     }, child:const Text("Block",style: TextStyle(
                         fontSize: 17
                     ),),
@@ -118,7 +116,6 @@ String? status;
 
               ],
             ),
-
           ),
         ),
       ),
@@ -135,6 +132,7 @@ String? status;
             loading=!loading;
             cmobile.clear();
           });
+
           return showSnackBar("Invited SuccessFully!", context);})
         .catchError((error) {
       setState(() {
@@ -145,11 +143,45 @@ String? status;
       return showMyDialog("Error", error.toString(), context);}  );
   }
   checkstatus()async{
-
-    setState(() {
-      loading=true;
-      showSnackBar("This function is under development!", context);
+    status="false";
+    await phone
+        .where('number', isEqualTo: mobile)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      // print(querySnapshot.toString());
+      querySnapshot.docs.forEach((doc) {
+        id = doc.id;
+        Map<String, dynamic> data =
+        doc.data()! as Map<String, dynamic>;
+        status = data['status'];
+        print("this is status ${status}");
+        print(id);
+      });
     });
+    if (status == "true"||status=="admin") {
+      phone
+          .doc(id)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          setState(() {
+            loading=true;
+          });
+          showSnackBar("This number is authorized", context);
+          // showMyDialog("Success", "Authorised", context);
+        } else {
+          print("not exist");
+          // Navigator.push(context,
+          // MaterialPageRoute(builder: (context) => Home()));
+        }
+      });
+    } else {
+      setState(() {
+        loading=true;
+      });
+      String msg="This app is not authorized to use this app\nDo you want to authorized";
+      AddUserDialog("Not Authorized",msg,mobile,context);
+    }
 }
 bool validate(){
     if(mobile.isEmpty) {
@@ -163,10 +195,11 @@ bool validate(){
     return true;
 }
 
-  void blockUser() {
-    setState(() {
-      loading=true;
-      showSnackBar("This function is under development!", context);
-    });
+  void blockUser(id) {
+     phone
+        .doc(id)
+        .update({'status': 'true'})
+        .then((value) => showSnackBar("Blocked Successfully", context))
+        .catchError((error) => print("Failed to update user: $error"));
   }
   }

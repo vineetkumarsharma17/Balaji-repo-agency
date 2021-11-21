@@ -1,10 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.balaji_repo_agency">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="balaji_repo_agency"
+        android:label="Balaji Repo Agency"
         android:usesCleartextTraffic="true"
-        android:icon="@mipmap/ic_launcher">
-
+        android:icon="@mipmap/ic_launcher"
+   >
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

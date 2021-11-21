@@ -27,7 +27,8 @@ class _LoginMobileState extends State<LoginMobile> {
     // mobile.text=await _autoFill.hint;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Balaji Repo"),
+        title: Text("Balaji Repo Agency"),
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -64,7 +65,7 @@ class _LoginMobileState extends State<LoginMobile> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0),
-                    child: TextFormField(
+                    child: TextField(
                       style:const TextStyle(color: Colors.white),
                       controller: mobile,
                       keyboardType: TextInputType.phone,
@@ -143,18 +144,19 @@ class _LoginMobileState extends State<LoginMobile> {
       setState(() {
         loading=true;
       });
-      showMyDialog("Failed", "your are not authorized to user this app.Contact to sumit tiwari",
-          context);
+      String msg="You are not authorized to use this app\nPlease Contact to Sumit tiwari (9452597341)";
+      showMyDialog("Failed", msg, context);
     }
   }
   void sendOTP()async{
-      auth.verifyPhoneNumber(
+      try{auth.verifyPhoneNumber(
       phoneNumber: '+91'+mobile.text,
+        timeout: Duration(seconds: 25),
         verificationCompleted: (PhoneAuthCredential credential) async {
           await auth.signInWithCredential(credential);
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool('login',false);
-
+          showSnackBar("Verified Successfully",context);
           if(status=="admin") {
             prefs.setString('type',"admin");
             Navigator.push(context, MaterialPageRoute(builder:
@@ -173,6 +175,7 @@ class _LoginMobileState extends State<LoginMobile> {
         print(e);}
       },
       codeSent: (String verificationId, int? resendToken)async {
+        showSnackBar("Code sent to ${mobile.text} Successfully",context);
         loading=true;
         print("code sent to "+mobile.text);
         print(verificationId);
@@ -183,7 +186,24 @@ class _LoginMobileState extends State<LoginMobile> {
         print("=============================timeout");
         print("Timeout");
       },
-    );
+    ).catchError((e){
+        setState(() {
+          loading=true;
+        });
+      print("error==========cathcj");
+      print(e.toString());
+      });}on FirebaseAuthException catch  (e) {
+        setState(() {
+          loading=true;
+        });
+    print('Failed with error code: ${e.code}');
+    print(e.message);
+    }
+      //     .catchError((e){
+      //   print("=============================error");
+      // print(e);
+      // showSnackBar("Error+${e.toString()}", context);
+      // });
   }
   bool validate(){
     String mobile=this.mobile.text;

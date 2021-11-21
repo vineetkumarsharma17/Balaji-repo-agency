@@ -28,6 +28,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
       final User? user = (await auth.signInWithCredential(credential)).user;
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setBool('login',false);
+      showSnackBar("Verified Successfully",context);
       if(status=="admin") {
         prefs.setString('type',"admin");
         Navigator.push(context, MaterialPageRoute(builder:
@@ -46,7 +47,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Verify Mobile"),
+        title: Text("Balaji Repo Agency"),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -100,9 +101,10 @@ class _VerifyOTPState extends State<VerifyOTP> {
                 ):CircularProgressIndicator(),
                 SizedBox(height: 10,),
                 ElevatedButton(onPressed: (){
-                  //  Navigator.push(context, MaterialPageRoute(builder: (context)=>()));
-                  //   if(mobile.text.isNotEmpty){
                   print("clicked");
+                  setState(() {
+                    loading=false;
+                  });
                   verifyOTP();
                   // }
                 }, child: Text("Verify",style: TextStyle(
