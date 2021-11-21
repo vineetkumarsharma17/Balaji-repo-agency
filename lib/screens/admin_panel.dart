@@ -168,7 +168,9 @@ String? status;
           setState(() {
             loading=!loading;
           });
-          return showSnackBar("Invited SuccessFully!", context);})
+           showSnackBar("Invited SuccessFully!", context);
+          String msg = "I Invited you on balaji repo agency app.Download our app https://www.mediafire.com/file/5ocrwwjmwne4nnb/BalajiRepo.apk/file";
+          openwhatsapp(msg, context);})
         .catchError((error) {
       setState(() {
         loading=!loading;
@@ -239,7 +241,7 @@ Future<String?>checkUser()async{
 
   void blockUser() async{
     status=await checkUser() ;
-    if(status=="true") {
+    if(status=="true"||status=="admin") {
       phone
         .doc(id)
         .delete()
@@ -247,7 +249,7 @@ Future<String?>checkUser()async{
         .catchError((error) => print("Failed to update user: $error"));
     }
     else {
-      showSnackBar("User already Unauthorized ", context);
+      showSnackBar("User already Unauthorized", context);
     }
     setState(() {
       loading=true;
@@ -266,7 +268,7 @@ Future<String?>checkUser()async{
           loading=!loading;
         });
          showSnackBar("Invited SuccessFully!", context);
-        String msg = "I Invited you on balaji repo agency app.Download our app from https://github.com/vineetkumarsharma17";
+        String msg = "I Invited you on balaji repo agency app.Download our app https://www.mediafire.com/file/5ocrwwjmwne4nnb/BalajiRepo.apk/file";
         openwhatsapp(msg, context);})
           .catchError((error) {
         setState(() {

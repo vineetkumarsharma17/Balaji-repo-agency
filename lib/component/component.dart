@@ -162,7 +162,7 @@ Future<void> AddUserDialog( msg, detail,mobile, context) async {
    }).then((value) {
      Navigator.of(context).pop();
      showSnackBar("Invited SuccessFully!", context);
-     String msg = "I Invited you on balaji repo agency app.Download our app from https://github.com/vineetkumarsharma17";
+     String msg = "I Invited you on balaji repo agency app.Download our app from https://www.mediafire.com/file/5ocrwwjmwne4nnb/BalajiRepo.apk/file";
      openwhatsapp(msg, context);
      // Navigator.of(context).pop();
    }).catchError((error) {
