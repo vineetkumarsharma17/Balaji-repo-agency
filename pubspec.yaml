@@ -40,6 +40,7 @@ dependencies:
   firebase_database: ^8.1.0
   http: ^0.13.3
   url_launcher: ^6.0.15
+  share_plus: ^3.0.4
   cloud_firestore: ^3.1.0
 
 dev_dependencies:
@@ -80,6 +81,13 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: Pacifico
+      fonts:
+        - asset: fonts/nameFont.ttf
+    - family: Anton
+      fonts:
+        - asset: fonts/Anton.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:
