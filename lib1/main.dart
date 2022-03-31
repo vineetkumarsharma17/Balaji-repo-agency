@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:developer';
+
+import 'package:balaji_repo_agency/screens/admin_panel.dart';
+// import 'package:balaji_repo_agency/screens/home_screen.dart';
+// import 'package:balaji_repo_agency/screens/mobile_login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:balaji_repo_agency/Screens/admin_panel.dart';
-
-import 'package:balaji_repo_agency/Screens/user_profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'Screens/login_screen.dart';
-import 'Screens/user_homepage.dart';
+
 import 'component/alertdilog.dart';
 
 //https://csvjson.com/csv2json
@@ -20,25 +20,27 @@ void main() async {
   runApp(MaterialApp(
     theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
-        appBarTheme: const AppBarTheme(backgroundColor: Colors.teal)),
+        appBarTheme: AppBarTheme(backgroundColor: Colors.teal)),
     debugShowCheckedModeBanner: false,
+    // home: SpalshPage(),
     home: SpalshPage(),
-    // home: UserProfile(),
+    // home: AdminPanel(),
   ));
 }
 
 class SpalshPage extends StatefulWidget {
+  const SpalshPage({Key key}) : super(key: key);
+
   @override
   State<SpalshPage> createState() => _SpalshPageState();
 }
 
 class _SpalshPageState extends State<SpalshPage> {
-  var id;
-  String status = "";
+  String status;
+  String id = "";
   String mobile = "";
   SharedPreferences preferences;
   CollectionReference phone = FirebaseFirestore.instance.collection('phone');
-
   bool loading = false;
   @override
   void initState() {
@@ -64,7 +66,7 @@ class _SpalshPageState extends State<SpalshPage> {
           .then((QuerySnapshot querySnapshot) {
         log("found:" + querySnapshot.size.toString());
         // print(querySnapshot.toString());
-        if (querySnapshot.size > 0)
+        if (querySnapshot.size > 0) {
           querySnapshot.docs.forEach((doc) {
             id = doc.id;
             Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
@@ -75,9 +77,9 @@ class _SpalshPageState extends State<SpalshPage> {
               setState(() {
                 loading = false;
               });
-              preferences.setBool("login", true);
+              preferences?.setBool("login", true);
               String msg =
-                  "You are not authorized to use this app\nPlease Contact to Sunil Pal.";
+                  "You are not authorized to use this app\nPlease Contact to Sumit Tiwari().";
               showMyDialog("Failed", msg, context);
             } else {
               setState(() {
@@ -86,7 +88,7 @@ class _SpalshPageState extends State<SpalshPage> {
               check_if_already();
             }
           });
-        else {
+        } else {
           setState(() {
             loading = false;
           });
@@ -100,7 +102,7 @@ class _SpalshPageState extends State<SpalshPage> {
       });
     } else {
       Navigator.push(
-              context, MaterialPageRoute(builder: (context) => LoginScreen()))
+              context, MaterialPageRoute(builder: (context) => LoginMobile()))
           .then((value) => SystemNavigator.pop());
     }
   }
@@ -113,8 +115,8 @@ class _SpalshPageState extends State<SpalshPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 300,
-              height: 300,
+              width: 250,
+              height: 250,
               child: const Image(
                 image: AssetImage('assets/images/logo.png'),
               ),
@@ -127,31 +129,27 @@ class _SpalshPageState extends State<SpalshPage> {
   }
 
   void check_if_already() async {
-    print("data=============");
-    print(await preferences.getBool('login'));
-    bool loginstatus = preferences.getBool('login') ?? true;
-    bool isregisterd = preferences.getBool('isResister') ?? false;
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    // print("data=============");
+    // print(await preferences.getBool('login'));
+    bool loginstatus = await preferences.getBool('login') ?? true;
     if (loginstatus == false) {
       if (preferences.getString("type") == "admin") {
-        Navigator.push(context,
-                MaterialPageRoute(builder: (context) => AdminPanelScreen()))
+        Navigator.push(
+                context, MaterialPageRoute(builder: (context) => AdminPanel()))
             .then((value) => SystemNavigator.pop());
       } else if (preferences.getString("type") == "user") {
-        if (isregisterd) {
-          Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => UserScreenHome()))
-              .then((value) => SystemNavigator.pop());
-        } else
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => UserProfile()));
+        Navigator.push(
+                context, MaterialPageRoute(builder: (context) => HomeScreen()))
+            .then((value) => SystemNavigator.pop());
       } else {
         Navigator.push(
-                context, MaterialPageRoute(builder: (context) => LoginScreen()))
+                context, MaterialPageRoute(builder: (context) => LoginMobile()))
             .then((value) => SystemNavigator.pop());
       }
     } else {
       Navigator.push(
-              context, MaterialPageRoute(builder: (context) => LoginScreen()))
+              context, MaterialPageRoute(builder: (context) => LoginMobile()))
           .then((value) => SystemNavigator.pop());
     }
   }
