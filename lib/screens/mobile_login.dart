@@ -165,7 +165,7 @@ class _LoginMobileState extends State<LoginMobile> {
           await auth.signInWithCredential(credential);
 
           prefs.setBool('login', false);
-          prefs.setString("mobile", mobile.text);
+          prefs.setString('number', mobile.text);
           showSnackBar("Verified Successfully", context);
           if (status == "admin") {
             prefs.setString('type', "admin");
@@ -189,9 +189,11 @@ class _LoginMobileState extends State<LoginMobile> {
         },
         codeSent: (String verificationId, int? resendToken) async {
           showSnackBar("Code sent to ${mobile.text} Successfully", context);
-          loading = true;
-          print("code sent to " + mobile.text);
-          prefs.setString("mobile", mobile.text);
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          setState(() {
+            prefs.setString('number', mobile.text);
+            loading = true;
+          });
           print(verificationId);
           Navigator.push(
               context,

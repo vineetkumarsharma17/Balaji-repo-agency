@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AdminPanel extends StatefulWidget {
@@ -159,47 +160,41 @@ class _AdminPanelState extends State<AdminPanel> {
                       ),
                       style: buttonStyle(),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        mobile = cmobile.text;
-                        if (validate()) {
-                          setState(() {
-                            loading = false;
-                            logout_btn = true;
-                          });
-                          blockUser();
-                        }
-                        // blockUser(id);
-                      },
-                      child: const Text(
-                        "Block",
-                        style: TextStyle(fontSize: 17),
-                      ),
-                      style: buttonStyle(),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        launchURL();
-                        // blockUser(id);
-                      },
-                      child: const Text(
-                        "Upload data",
-                        style: TextStyle(fontSize: 17),
-                      ),
-                      style: buttonStyle(),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomeScreen()));
-                      },
-                      child: const Text(
-                        "Search data",
-                        style: TextStyle(fontSize: 17),
-                      ),
-                      style: buttonStyle(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            mobile = cmobile.text;
+                            if (validate()) {
+                              setState(() {
+                                loading = false;
+                                logout_btn = true;
+                              });
+                              blockUser();
+                            }
+                            // blockUser(id);
+                          },
+                          child: const Text(
+                            "Block",
+                            style: TextStyle(fontSize: 17),
+                          ),
+                          style: buttonStyle(),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen()));
+                          },
+                          child: const Text(
+                            "Search data",
+                            style: TextStyle(fontSize: 17),
+                          ),
+                          style: buttonStyle(),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -297,19 +292,29 @@ class _AdminPanelState extends State<AdminPanel> {
   }
 
   void blockUser() async {
-    status = await checkUser();
-    if (status == "true" || status == "admin") {
-      phone
-          .doc(id)
-          .delete()
-          .then((value) => showSnackBar("Blocked Successfully", context))
-          .catchError((error) => print("Failed to update user: $error"));
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if (pref.getString("number") != mobile) {
+      status = await checkUser();
+      if (status == "true" || status == "admin") {
+        phone
+            .doc(id)
+            .delete()
+            .then((value) => showSnackBar("Blocked Successfully", context))
+            .catchError((error) =>
+                showSnackBar("Failed to update user: $error", context));
+      } else {
+        showSnackBar("User already Blocked", context);
+      }
+      setState(() {
+        loading = true;
+      });
     } else {
-      showSnackBar("User already Unauthorized", context);
+      setState(() {
+        loading = true;
+      });
+      showMyDialog(
+          "Alert", "For security reason you can't block yourself.", context);
     }
-    setState(() {
-      loading = true;
-    });
   }
 
   void inviteadmin() async {

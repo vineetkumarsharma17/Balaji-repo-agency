@@ -1,12 +1,16 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:balaji_repo_agency/screens/admin_panel.dart';
 import 'package:balaji_repo_agency/screens/home_screen.dart';
 import 'package:balaji_repo_agency/screens/mobile_login.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'component/alertdilog.dart';
 
 //https://csvjson.com/csv2json
 // https://beautifytools.com/excel-to-sql-converter.php
@@ -32,26 +36,93 @@ class SpalshPage extends StatefulWidget {
 }
 
 class _SpalshPageState extends State<SpalshPage> {
+  String? status;
+  String id = "";
+  String mobile = "";
+  SharedPreferences? preferences;
+  CollectionReference phone = FirebaseFirestore.instance.collection('phone');
+  bool loading = false;
+  @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 2), () {
-      check_if_already();
-      print("data=============");
-      var saved = DateTime.now().add(const Duration(days: 7));
-      print(DateTime.now().isBefore(saved));
+
+    Timer(const Duration(seconds: 2), () {
+      setState(() {
+        checkUser();
+        loading = true;
+      });
     });
+  }
+
+  checkUser() async {
+    preferences = await SharedPreferences.getInstance();
+    mobile = preferences!.getString("number") ?? "";
+    log("number:$mobile");
+    status = "false";
+    if (mobile.isNotEmpty) {
+      await phone
+          .where('number', isEqualTo: mobile)
+          .get()
+          .then((QuerySnapshot querySnapshot) {
+        log("found:" + querySnapshot.size.toString());
+        // print(querySnapshot.toString());
+        if (querySnapshot.size > 0) {
+          querySnapshot.docs.forEach((doc) {
+            id = doc.id;
+            Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+            status = data['status'];
+            log("this is status ${status}");
+            log(id);
+            if (status == "false") {
+              setState(() {
+                loading = false;
+              });
+              preferences?.setBool("login", true);
+              String msg =
+                  "You are not authorized to use this app\nPlease Contact to Sumit Tiwari().";
+              showMyDialog("Failed", msg, context);
+            } else {
+              setState(() {
+                loading = false;
+              });
+              check_if_already();
+            }
+          });
+        } else {
+          setState(() {
+            loading = false;
+          });
+          preferences!.setBool("login", true);
+          String msg =
+              "You are not authorized to use this app\nPlease Contact to Sunil Pal.";
+          showMyDialog("Failed", msg, context);
+        }
+      }).timeout(const Duration(seconds: 15), onTimeout: () {
+        showMyDialog("Timeout", "Sorry", context);
+      });
+    } else {
+      Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const LoginMobile()))
+          .then((value) => SystemNavigator.pop());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Container(
-          width: 250,
-          height: 250,
-          child: const Image(
-            image: AssetImage('assets/images/logo.png'),
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 250,
+              height: 250,
+              child: const Image(
+                image: AssetImage('assets/images/logo.png'),
+              ),
+            ),
+            loading ? CircularProgressIndicator() : SizedBox()
+          ],
         ),
       ),
     );

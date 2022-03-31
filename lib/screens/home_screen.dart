@@ -193,40 +193,47 @@ class _HomeScreenState extends State<HomeScreen> {
                                         itemCount: detail.length,
                                         itemBuilder: (context, i) {
                                           String key = detail.keys.elementAt(i);
-                                          return Row(
-                                            children: [
-                                              Container(
-                                                margin: EdgeInsets.only(top: 3),
-                                                width: width * .35,
-                                                child: Text(
-                                                  "$key",
-                                                  style: const TextStyle(
-                                                      color: Colors.white),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 2, horizontal: 5),
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  margin:
+                                                      EdgeInsets.only(top: 3),
+                                                  width: width * .35,
+                                                  child: Text(
+                                                    "$key",
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
                                                 ),
-                                              ),
-                                              Container(
-                                                margin: const EdgeInsets.only(
-                                                    top: 3),
-                                                width: width * .02,
-                                                child: const Text(
-                                                  ":",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
+                                                Container(
+                                                  margin: const EdgeInsets.only(
+                                                      top: 3),
+                                                  width: width * .02,
+                                                  child: const Text(
+                                                    ":",
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
                                                 ),
-                                              ),
-                                              Container(
-                                                margin: const EdgeInsets.only(
-                                                    top: 3),
-                                                width: width * .45,
-                                                child: Text(
-                                                  "${detail[key]}",
-                                                  style: const TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                              )
-                                            ],
+                                                Container(
+                                                  margin: const EdgeInsets.only(
+                                                      top: 3),
+                                                  width: width * .45,
+                                                  child: Text(
+                                                    "${detail[key]}",
+                                                    style: const TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           );
                                         }),
                                     Row(

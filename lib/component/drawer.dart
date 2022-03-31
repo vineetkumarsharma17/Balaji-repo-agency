@@ -1,76 +1,90 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        color: Colors.teal,
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children:  [
-              SizedBox(height: 20,),
-             Text("Balaji Repo Agency",style: TextStyle(
-               fontSize: 30,
-               color: Colors.white,
-               fontFamily: "Anton",
-               letterSpacing: 3
-             ),),
-              SizedBox(height: 10,),
-             CircleAvatar(
-               backgroundColor: Colors.white,
-               radius: 62,
-               child:  CircleAvatar(backgroundImage: AssetImage("assets/images/pic.jpg"),
-                 radius: 60,),
-             ), SizedBox(height: 10,),
-
-              Text("Sumit Tiwari",style: TextStyle(
-                  fontSize: 30,
-                  color: Colors.white,
-                  fontFamily: "Pacifico",
-                  letterSpacing: 3
-              ),),
-              SizedBox(
-                width: 150,
-                child: Divider(
-                  color: Colors.teal[100],
-
+          color: Colors.teal,
+          child: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-              GestureDetector(
-                onTap: (){
-                  launchCaller();
-                },
-                child: Card(
-                  margin: EdgeInsets.symmetric(vertical: 10,horizontal: 30),
-                  //padding: EdgeInsets.all(10),
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Row(
-                      children: const [
-                        Icon(
-                          Icons.call,
-                          color: Colors.teal,
-                        ),
-                        SizedBox(width: 20,),
-                        Text("+918874327867",
-                          style: TextStyle(
-                              color: Colors.black
-                          ),),
-                      ],
+                const Text(
+                  "Balaji Repo Agency",
+                  style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                      fontFamily: "Anton",
+                      letterSpacing: 3),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 62,
+                  child: CircleAvatar(
+                    backgroundImage: AssetImage("assets/images/pic.jpg"),
+                    radius: 60,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text(
+                  "Sumit Tiwari",
+                  style: const TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                      fontFamily: "Pacifico",
+                      letterSpacing: 3),
+                ),
+                SizedBox(
+                  width: 150,
+                  child: Divider(
+                    color: Colors.teal[100],
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    launchCaller();
+                  },
+                  child: Card(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 30),
+                    //padding: EdgeInsets.all(10),
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                        children: const [
+                          Icon(
+                            Icons.call,
+                            color: Colors.teal,
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            "+919452597341",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        )
-      ),
-
+              ],
+            ),
+          )),
     );
   }
+
   launchCaller() async {
     const url = "tel:9452597341";
     if (await canLaunch(url)) {
