@@ -51,7 +51,7 @@ class _User_ListState extends State<User_List> {
     return Scaffold(
       backgroundColor: Colors.teal,
       appBar: AppBar(
-        title: const Text("Pal Associates"),
+        title: const Text("Bala ji Repo Agency"),
         actions: [
           Padding(
               padding: const EdgeInsets.only(right: 15.0),
@@ -75,7 +75,7 @@ class _User_ListState extends State<User_List> {
                     return Card(
                       //color: Colors.w,
                       child: Padding(
-                        padding: EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(5),
                         child: Column(
                           children: [
                             ListView.builder(
@@ -90,7 +90,7 @@ class _User_ListState extends State<User_List> {
                                     child: Row(
                                       children: [
                                         Container(
-                                          margin: EdgeInsets.only(top: 3),
+                                          margin: const EdgeInsets.only(top: 3),
                                           width: width * .35,
                                           child: Text(
                                             "$key",
@@ -135,7 +135,7 @@ class _User_ListState extends State<User_List> {
                       ),
                     );
                   }))
-          : Center(
+          : const Center(
               child: CircularProgressIndicator(
                 color: Colors.white,
               ),

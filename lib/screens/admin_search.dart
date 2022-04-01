@@ -86,7 +86,7 @@ class _AdminSearchScreenState extends State<AdminSearchScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Pal Associates"),
+        title: const Text("Bala ji Repo Agency"),
         actions: [
           Padding(
               padding: const EdgeInsets.only(right: 15.0),

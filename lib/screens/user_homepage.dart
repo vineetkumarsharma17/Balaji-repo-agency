@@ -82,7 +82,7 @@ class _UserScreenHomeState extends State<UserScreenHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Pal Associates"),
+        title: const Text("Bala ji Repo Agency"),
         actions: [
           Padding(
               padding: const EdgeInsets.only(right: 15.0),
