@@ -37,7 +37,7 @@ class _OtpScreenState extends State<OtpScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Pal Associates"),
+        title: const Text("Bala ji Repo Agency"),
         // automaticallyImplyLeading: false,
       ),
       drawer: MyDrawer(),

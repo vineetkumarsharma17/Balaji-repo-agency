@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Pal Associates"),
+        title: const Text("Bala ji Repo Agency"),
         // automaticallyImplyLeading: false,
       ),
       drawer: MyDrawer(),
@@ -76,20 +76,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       children: [
                         Container(
-                          margin: EdgeInsets.only(top: 25),
+                          margin: EdgeInsets.only(top: 10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               RichText(
                                 text: TextSpan(
-                                    text: "   Welcome to",
+                                    text: " Welcome to",
                                     style: TextStyle(
                                       fontSize: 25,
                                       color: Colors.yellow[700],
                                     ),
                                     children: [
                                       TextSpan(
-                                        text: "\nPal Associates,",
+                                        text: "\nBala ji Repo,",
                                         style: TextStyle(
                                           letterSpacing: 1,
                                           fontSize: 25,

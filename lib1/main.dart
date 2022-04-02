@@ -11,6 +11,9 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'component/alertdilog.dart';
+import 'screens/admin_panel.dart';
+import 'screens/home_screen.dart';
+import 'screens/mobile_login.dart';
 
 //https://csvjson.com/csv2json
 // https://beautifytools.com/excel-to-sql-converter.php
@@ -20,7 +23,7 @@ void main() async {
   runApp(MaterialApp(
     theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
-        appBarTheme: AppBarTheme(backgroundColor: Colors.teal)),
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.teal)),
     debugShowCheckedModeBanner: false,
     // home: SpalshPage(),
     home: SpalshPage(),
