@@ -117,7 +117,7 @@ class _UserScreenHomeState extends State<UserScreenHome> {
                 Positioned(
                   top: 200,
                   child: Container(
-                    height: 280,
+                    height: 260,
                     padding: const EdgeInsets.all(20),
                     width: MediaQuery.of(context).size.width - 40,
                     margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -179,7 +179,7 @@ class _UserScreenHomeState extends State<UserScreenHome> {
                 ),
                 //Trick to add the submit button
                 Positioned(
-                  top: 435,
+                  top: 410,
                   right: 0,
                   left: 0,
                   child: Center(

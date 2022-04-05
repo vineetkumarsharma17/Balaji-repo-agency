@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
+import 'package:balaji_repo_agency/Screens/admin_search.dart';
+import 'package:balaji_repo_agency/Screens/otp_screen.dart';
+import 'package:balaji_repo_agency/Screens/user_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +25,9 @@ void main() async {
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(backgroundColor: Colors.teal)),
     debugShowCheckedModeBanner: false,
-    home: SpalshPage(),
+    //home: SpalshPage(),
     // home: UserProfile(),
+    home: UserProfile(),
   ));
 }
 

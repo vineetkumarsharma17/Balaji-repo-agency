@@ -49,18 +49,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   left: 0,
                   child: Container(
                     height: 300,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage("assets/images/otp.webp"),
                           fit: BoxFit.fill),
                     ),
                   ),
                 ),
-                // main Container for login and Signup
+                // main Container for login and Signup ffffffffffffffffffffffffffffffffffffffffffffffffff
                 Positioned(
-                  top: 200,
+                  top: 150,
                   child: Container(
-                    height: 380,
+                    height: 340,
                     padding: EdgeInsets.all(20),
                     width: MediaQuery.of(context).size.width - 40,
                     margin: EdgeInsets.symmetric(horizontal: 20),
@@ -76,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       children: [
                         Container(
-                          margin: EdgeInsets.only(top: 10),
+                          margin: const EdgeInsets.only(top: 0.5),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -87,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       fontSize: 25,
                                       color: Colors.yellow[700],
                                     ),
-                                    children: [
+                                    children: const [
                                       TextSpan(
                                         text: "\nBala ji Repo,",
                                         style: TextStyle(
@@ -99,12 +99,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                       )
                                     ]),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Container(
                                 // margin: EdgeInsets.only(left: 60),
-                                child: Text(
+                                child: const Text(
                                   "Signin to Continue",
                                   style: TextStyle(
                                       letterSpacing: 3, color: Colors.blueGrey),
@@ -114,18 +114,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 50),
+                          margin: EdgeInsets.only(top: 30),
                           // padding: EdgeInsets.only(),
                           child: Column(
                             children: [
                               TextField(
                                 controller: mobileCtrl,
                                 keyboardType: TextInputType.number,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   prefixIcon: Icon(
                                     Icons.email,
                                     color: Palette.iconColor,
@@ -158,15 +158,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                       fontSize: 14, color: Palette.textColor1),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 15,
                               ),
                               Container(
                                 width: 200,
-                                margin: EdgeInsets.only(top: 20),
+                                margin: const EdgeInsets.only(top: 5),
                                 child: RichText(
                                   textAlign: TextAlign.center,
-                                  text: TextSpan(
+                                  text: const TextSpan(
                                       text:
                                           "By pressing 'Submit' you agree to our ",
                                       style:
@@ -190,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 //Trick to add the submit button
                 Positioned(
-                  top: 535,
+                  top: 445,
                   right: 0,
                   left: 0,
                   child: Center(
@@ -223,7 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: loading
                             ? Container(
                                 decoration: BoxDecoration(
-                                    gradient: LinearGradient(
+                                    gradient: const LinearGradient(
                                         colors: [Colors.orange, Colors.red],
                                         begin: Alignment.topLeft,
                                         end: Alignment.bottomRight),
@@ -236,7 +236,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         offset: Offset(0, 1),
                                       ),
                                     ]),
-                                child: Icon(
+                                child: const Icon(
                                   Icons.arrow_forward,
                                   color: Colors.white,
                                 ),

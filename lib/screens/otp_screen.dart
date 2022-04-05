@@ -58,9 +58,9 @@ class _OtpScreenState extends State<OtpScreen> {
           ),
           // main Container for login and Signup
           Positioned(
-            top: 200,
+            top: 150,
             child: Container(
-              height: 380,
+              height: 340,
               padding: EdgeInsets.all(20),
               width: MediaQuery.of(context).size.width - 40,
               margin: EdgeInsets.symmetric(horizontal: 20),
@@ -75,7 +75,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   ]),
               child: ListView(
                 children: [
-                  Center(
+                  const Center(
                     child: Text(
                       "Verification",
                       style: TextStyle(
@@ -100,7 +100,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       print("Completed: " + pin);
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 25,
                   ),
                   Container(
@@ -108,7 +108,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     margin: EdgeInsets.only(top: 20),
                     child: RichText(
                       textAlign: TextAlign.center,
-                      text: TextSpan(
+                      text: const TextSpan(
                           text: "By pressing 'Submit' you agree\n to our ",
                           style: TextStyle(color: Palette.textColor2),
                           children: [
@@ -126,7 +126,7 @@ class _OtpScreenState extends State<OtpScreen> {
           ),
           //Trick to add the submit button
           Positioned(
-            top: 535,
+            top: 440,
             right: 0,
             left: 0,
             child: Center(

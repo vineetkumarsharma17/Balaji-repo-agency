@@ -15,7 +15,7 @@ class MyDrawer extends StatelessWidget {
                   height: 20,
                 ),
                 const Text(
-                  "Bala ji Repo Agency",
+                  "Bala ji Repo,",
                   style: TextStyle(
                       fontSize: 30,
                       color: Colors.white,
@@ -98,7 +98,7 @@ class MyDrawer extends StatelessWidget {
                             width: 20,
                           ),
                           Text(
-                            "sunilpalbdn35@gmail.com",
+                            "sumit35@gmail.com",
                             style: TextStyle(color: Colors.black),
                           ),
                         ],

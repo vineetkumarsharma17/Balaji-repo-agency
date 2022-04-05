@@ -25,9 +25,9 @@ void main() async {
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(backgroundColor: Colors.teal)),
     debugShowCheckedModeBanner: false,
-    // home: SpalshPage(),
     home: SpalshPage(),
-    // home: AdminPanel(),
+    //home: SpalshPage(),
+    //home: AdminPanel(),
   ));
 }
 
