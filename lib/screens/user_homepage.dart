@@ -35,7 +35,7 @@ class _UserScreenHomeState extends State<UserScreenHome> {
       "data": query,
     };
     var response = await http
-        .post(Uri.parse("http://vkwilson.email/getuserdata.php"),
+        .post(Uri.parse("http://balajirepo.agency/getuserdata.php"),
             body: json.encode(prm))
         .timeout(const Duration(seconds: 34), onTimeout: () {
       showSnackBar("Time out", context);
@@ -244,13 +244,14 @@ class _UserScreenHomeState extends State<UserScreenHome> {
               shrinkWrap: true,
               itemCount: data.length,
               itemBuilder: (context, index) {
+                log(data[index]["rcno"].toString());
                 return ListTile(
                     onTap: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => VehicleDetailScreen(
-                                  data[index]["VEHICLE_NO"].toString())));
+                                  data[index]["rcno"].toString())));
                       // Clipboard.setData(
                       //     ClipboardData(text: data[index].toString()));
                       // showSnackBar("Text Coppied!", context);
@@ -258,12 +259,11 @@ class _UserScreenHomeState extends State<UserScreenHome> {
                     leading: const Icon(Icons.star),
                     trailing: IconButton(
                       onPressed: () {
-                        openwhatsapp(
-                            data[index]["VEHICLE_NO"].toString(), context);
+                        openwhatsapp(data[index]["rcno"].toString(), context);
                       },
                       icon: const Icon(Icons.share),
                     ),
-                    title: Text(data[index]["VEHICLE_NO"].toString(),
+                    title: Text(data[index]["rcno"].toString(),
                         style: const TextStyle(fontWeight: FontWeight.bold)));
               }),
         ],

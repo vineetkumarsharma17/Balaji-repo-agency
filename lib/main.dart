@@ -119,9 +119,7 @@ class _SpalshPageState extends State<SpalshPage> {
             Container(
               width: 300,
               height: 300,
-              child: const Image(
-                image: AssetImage('assets/images/logo.png'),
-              ),
+              child: Image.asset('assets/images/logo.png'),
             ),
             loading ? CircularProgressIndicator() : SizedBox()
           ],

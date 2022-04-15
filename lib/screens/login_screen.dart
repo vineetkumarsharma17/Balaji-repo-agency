@@ -324,7 +324,7 @@ class _LoginScreenState extends State<LoginScreen> {
         loading = true;
       });
       String msg =
-          "You are not authorized to use this app\nPlease Contact to Sunil Pal.";
+          "You are not authorized to use this app\nPlease Contact to Sumit Tiwari.";
       showMyDialog("Failed", msg, context);
     }
   }
@@ -358,6 +358,7 @@ class _LoginScreenState extends State<LoginScreen> {
             loading = true;
           });
           if (e.code == 'invalid-phone-number') {
+            showSnackBar("Invalid mobile number", context);
             print('The provided phone number is not valid.');
             //print("=============================verified");
             print(e);

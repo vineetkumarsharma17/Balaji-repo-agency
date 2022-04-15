@@ -435,7 +435,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
         });
         showSnackBar("Invited SuccessFully!", context);
         String msg =
-            "I Invited you on Pal Associates app .Please download our app from http://vkwilson.email/";
+            "I Invited you on Balaji Repo Services app .Please download our app from http://balajirepo.agency/";
         openwhatsapp(msg, context);
       }).catchError((error) {
         setState(() {
@@ -490,7 +490,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
         loading = true;
       });
       String msg =
-          "This app is not authorized to use this app\nDo you want to authorized";
+          "This user is not authorized to use this app\nDo you want to authorized?";
       AddUserDialog("Not Authorized", msg, mobile, context);
     }
   }
@@ -578,7 +578,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
         });
         showSnackBar("Invited SuccessFully!", context);
         String msg =
-            "I Invited you on Pal Associates app as Admin.Please download our app from http://vkwilson.email/";
+            "I Invited you on Bala ji Repo services app as Admin.Please download our app from http://balajirepo.agency/";
         openwhatsapp(msg, context);
       }).catchError((error) {
         setState(() {

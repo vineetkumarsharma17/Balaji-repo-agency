@@ -16,7 +16,7 @@ class User_List extends StatefulWidget {
 
 class _User_ListState extends State<User_List> {
   List data = [];
-  bool loading = true;
+  bool loading = false;
   CollectionReference phone = FirebaseFirestore.instance.collection('phone');
   Future getDocs() async {
     QuerySnapshot querySnapshot = await phone.get().then((querySnapshot) {

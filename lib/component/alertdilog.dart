@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Screens/login_screen.dart';
+
 Future<void> showMyDialog(
     String msg, String detail, BuildContext context) async {
   return showDialog<void>(
@@ -50,16 +52,13 @@ Future<void> showExitDialog(
             onPressed: () async {
               SharedPreferences preferences =
                   await SharedPreferences.getInstance();
-              preferences.setBool("login", true);
-              Navigator.of(context).pop();
+              preferences.clear();
+              Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()))
+                  .then((value) => SystemNavigator.pop());
               showSnackBar(
                   "Thanks for using our app\nThis app is developed by Vineet Kumar Sharma(8874327867)",
                   context);
-              Timer(const Duration(seconds: 3), () {
-                // Navigator.of(context).pop();
-                // showSnackBar("after timer",context);
-                SystemNavigator.pop();
-              });
             },
           ),
         ],

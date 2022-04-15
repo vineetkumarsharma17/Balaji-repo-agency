@@ -15,7 +15,7 @@ class MyDrawer extends StatelessWidget {
                   height: 20,
                 ),
                 const Text(
-                  "Bala ji Repo,",
+                  "Bala ji Repo",
                   style: TextStyle(
                       fontSize: 30,
                       color: Colors.white,
@@ -52,7 +52,7 @@ class MyDrawer extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    launchCaller();
+                    launchCaller("9634123672");
                   },
                   child: Card(
                     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
@@ -80,7 +80,7 @@ class MyDrawer extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    launchCaller();
+                    launchCaller("9634123672");
                   },
                   child: Card(
                     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
@@ -106,14 +106,52 @@ class MyDrawer extends StatelessWidget {
                     ),
                   ),
                 ),
+                Expanded(
+                    child: GestureDetector(
+                  onTap: () {
+                    launchCaller("8874327867");
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 20),
+                    // color: Colors.white,
+                    alignment: Alignment.bottomCenter,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: const [
+                        Text(
+                          "App is developed by",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          "vSafe Software Solution",
+                          style: TextStyle(
+                              fontSize: 17,
+                              color: Colors.white,
+                              fontFamily: "Pacifico",
+                              letterSpacing: 3),
+                        ),
+                        Text(
+                          "Contact:+918874327867",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ))
               ],
             ),
           )),
     );
   }
 
-  launchCaller() async {
-    const url = "tel:9634123672";
+  launchCaller(String num) async {
+    String url = "tel:$num";
     if (await canLaunch(url)) {
       await launch(url);
     } else {

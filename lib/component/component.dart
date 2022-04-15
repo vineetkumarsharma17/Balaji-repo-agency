@@ -96,7 +96,7 @@ addPhoneNumber(mobile, context) {
     Navigator.of(context).pop();
     showSnackBar("Invited SuccessFully!", context);
     String msg =
-        "I Invited you on Pal Associates app .Please download our app from http://vkwilson.email/";
+        "I Invited you on Pal Associates app .Please download our app from http://balajirepo.agency/";
     openwhatsapp(msg, context);
     // Navigator.of(context).pop();
   }).catchError((error) {

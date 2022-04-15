@@ -35,7 +35,7 @@ class _AdminSearchScreenState extends State<AdminSearchScreen> {
       "data": query,
     };
     var response = await http
-        .post(Uri.parse("http://vkwilson.email/getdataadmin.php"),
+        .post(Uri.parse("http://balajirepo.agency/getdetail.php"),
             body: json.encode(prm))
         .timeout(const Duration(seconds: 34), onTimeout: () {
       showSnackBar("Time out", context);
@@ -111,7 +111,7 @@ class _AdminSearchScreenState extends State<AdminSearchScreen> {
                 height: screenHeight * 0.02,
               ),
               const Text(
-                'Welcome User! ',
+                'Welcome Admin! ',
                 style: TextStyle(
                   fontSize: 33,
                   color: Colors.teal,
