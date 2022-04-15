@@ -25,9 +25,9 @@ void main() async {
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(backgroundColor: Colors.teal)),
     debugShowCheckedModeBanner: false,
-    //home: SpalshPage(),
-    // home: UserProfile(),
-    home: UserProfile(),
+    home: SpalshPage(),
+    //home: UserProfile(),
+    //home: UserProfile(),
   ));
 }
 
@@ -96,7 +96,7 @@ class _SpalshPageState extends State<SpalshPage> {
           });
           preferences.setBool("login", true);
           String msg =
-              "You are not authorized to use this app\nPlease Contact to Sunil Pal.";
+              "You are not authorized to use this app\nPlease Contact to Sumit Tiwari.";
           showMyDialog("Failed", msg, context);
         }
       }).timeout(const Duration(seconds: 15), onTimeout: () {

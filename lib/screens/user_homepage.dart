@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:balaji_repo_agency/Screens/vehicle_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:balaji_repo_agency/component/alertdilog.dart';
@@ -245,9 +246,14 @@ class _UserScreenHomeState extends State<UserScreenHome> {
               itemBuilder: (context, index) {
                 return ListTile(
                     onTap: () {
-                      Clipboard.setData(
-                          ClipboardData(text: data[index].toString()));
-                      showSnackBar("Text Coppied!", context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => VehicleDetailScreen(
+                                  data[index]["VEHICLE_NO"].toString())));
+                      // Clipboard.setData(
+                      //     ClipboardData(text: data[index].toString()));
+                      // showSnackBar("Text Coppied!", context);
                     },
                     leading: const Icon(Icons.star),
                     trailing: IconButton(
