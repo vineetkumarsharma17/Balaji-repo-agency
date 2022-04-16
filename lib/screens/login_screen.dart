@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -362,6 +364,7 @@ class _LoginScreenState extends State<LoginScreen> {
             print('The provided phone number is not valid.');
             //print("=============================verified");
             print(e);
+            showSnackBar(e.message, context);
           }
         },
         codeSent: (String verificationId, int resendToken) async {
@@ -399,7 +402,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         loading = true;
       });
-      print('Failed with error code: ${e.code}');
+      log('Failed with error code: ${e.code}');
       print(e.message);
     }
   }
