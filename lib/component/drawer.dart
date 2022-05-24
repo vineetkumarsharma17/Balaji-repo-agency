@@ -1,7 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MyDrawer extends StatelessWidget {
+class MyDrawer extends StatefulWidget {
+  @override
+  State<MyDrawer> createState() => _MyDrawerState();
+}
+
+class _MyDrawerState extends State<MyDrawer> {
+  String buildNo = '';
+
+  appVer() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    setState(() {});
+    buildNo = packageInfo.version + "(" + packageInfo.buildNumber + ")";
+  }
+
+  initState() {
+    appVer();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -22,7 +40,7 @@ class MyDrawer extends StatelessWidget {
                       fontFamily: "Anton",
                       letterSpacing: 3),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 const CircleAvatar(
@@ -33,7 +51,7 @@ class MyDrawer extends StatelessWidget {
                     radius: 60,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 const Text(
@@ -55,7 +73,8 @@ class MyDrawer extends StatelessWidget {
                     launchCaller("9634123672");
                   },
                   child: Card(
-                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                     //padding: EdgeInsets.all(10),
                     color: Colors.white,
                     child: Padding(
@@ -83,7 +102,8 @@ class MyDrawer extends StatelessWidget {
                     launchCaller("9634123672");
                   },
                   child: Card(
-                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                     //padding: EdgeInsets.all(10),
                     color: Colors.white,
                     child: Padding(
@@ -112,20 +132,20 @@ class MyDrawer extends StatelessWidget {
                     launchCaller("8874327867");
                   },
                   child: Container(
-                    margin: EdgeInsets.only(bottom: 20),
+                    margin: const EdgeInsets.only(bottom: 20),
                     // color: Colors.white,
                     alignment: Alignment.bottomCenter,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           "App is developed by",
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.white,
                           ),
                         ),
-                        Text(
+                        const Text(
                           "vSafe Software Solution",
                           style: TextStyle(
                               fontSize: 17,
@@ -133,9 +153,16 @@ class MyDrawer extends StatelessWidget {
                               fontFamily: "Pacifico",
                               letterSpacing: 3),
                         ),
-                        Text(
+                        const Text(
                           "Contact:+918874327867",
                           style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          buildNo,
+                          style: const TextStyle(
                             fontSize: 12,
                             color: Colors.white,
                           ),
@@ -159,6 +186,8 @@ class MyDrawer extends StatelessWidget {
     }
   }
 }
+
+
 /*ListView(
 children: const [
 // ListTile(title: Text("Developer",style: TextStyle(

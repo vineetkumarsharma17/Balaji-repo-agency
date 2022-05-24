@@ -44,7 +44,8 @@ dependencies:
   cloud_firestore: ^3.1.0
   otp_text_field: ^1.1.2
   pin_entry_text_field: ^0.1.4
-  platform: ^3.1.0
+  # platform: ^3.1.0
+  package_info_plus: ^1.4.2
 
 dev_dependencies:
   flutter_test:

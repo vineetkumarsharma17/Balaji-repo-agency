@@ -123,6 +123,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               TextField(
                                 controller: mobileCtrl,
                                 keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(10)
+                                ],
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,

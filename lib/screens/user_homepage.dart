@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:balaji_repo_agency/Screens/vehicle_details.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:balaji_repo_agency/component/alertdilog.dart';
@@ -11,6 +13,7 @@ import 'package:balaji_repo_agency/component/drawer.dart';
 import 'package:balaji_repo_agency/component/share_to_whatsapp.dart';
 import 'package:balaji_repo_agency/component/snack_bar.dart';
 import 'package:http/http.dart' as http;
+import 'package:package_info_plus/package_info_plus.dart';
 
 class UserScreenHome extends StatefulWidget {
   const UserScreenHome({Key key}) : super(key: key);
@@ -25,7 +28,7 @@ class _UserScreenHomeState extends State<UserScreenHome> {
   List data = [];
   bool dataget = true;
   var rc_number = TextEditingController();
-  // List data = [];
+  FocusNode focusNode = FocusNode();
   search() async {
     setState(() {
       loading = false;
@@ -144,6 +147,7 @@ class _UserScreenHomeState extends State<UserScreenHome> {
                         ),
                         const SizedBox(height: 40),
                         TextField(
+                          focusNode: focusNode,
                           controller: rc_number,
                           keyboardType: TextInputType.text,
                           style: const TextStyle(
@@ -203,7 +207,9 @@ class _UserScreenHomeState extends State<UserScreenHome> {
                         onTap: () {
                           setState(() {
                             //loading = !loading;
+                            checkUpdate(context);
                             if (validate()) {
+                              focusNode.unfocus();
                               search();
                             }
                           });
@@ -240,35 +246,106 @@ class _UserScreenHomeState extends State<UserScreenHome> {
           //     ? const Text("")
           //     :
           ListView.builder(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: data.length,
+              itemCount:
+                  data.length > 2 ? (data.length / 2).toInt() : data.length,
               itemBuilder: (context, index) {
                 log(data[index]["rcno"].toString());
-                return ListTile(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => VehicleDetailScreen(
-                                  data[index]["rcno"].toString())));
-                      // Clipboard.setData(
-                      //     ClipboardData(text: data[index].toString()));
-                      // showSnackBar("Text Coppied!", context);
-                    },
-                    leading: const Icon(Icons.star),
-                    trailing: IconButton(
-                      onPressed: () {
-                        openwhatsapp(data[index]["rcno"].toString(), context);
-                      },
-                      icon: const Icon(Icons.share),
+                return Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ListTile(
+                              tileColor: Colors.grey,
+                              iconColor: Colors.white,
+                              textColor: Colors.white,
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            VehicleDetailScreen(data[index]
+                                                    ["rcno"]
+                                                .toString())));
+                                // Clipboard.setData(
+                                //     ClipboardData(text: data[index].toString()));
+                                // showSnackBar("Text Coppied!", context);
+                              },
+                              trailing: IconButton(
+                                onPressed: () {
+                                  openwhatsapp(
+                                      data[index]["rcno"].toString(), context);
+                                },
+                                icon: const Icon(Icons.share),
+                              ),
+                              title: Text(data[index]["rcno"].toString(),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold))),
+                        ),
+                        data.length - 1 >= index + 1
+                            ? Expanded(
+                                child: ListTile(
+                                    tileColor: Colors.teal,
+                                    iconColor: Colors.white,
+                                    textColor: Colors.white,
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  VehicleDetailScreen(
+                                                      data[index + 1]["rcno"]
+                                                          .toString())));
+                                      // Clipboard.setData(
+                                      //     ClipboardData(text: data[index].toString()));
+                                      // showSnackBar("Text Coppied!", context);
+                                    },
+                                    trailing: IconButton(
+                                      onPressed: () {
+                                        openwhatsapp(
+                                            data[index]["rcno"].toString(),
+                                            context);
+                                      },
+                                      icon: const Icon(Icons.share),
+                                    ),
+                                    title: Text(
+                                        data[index + 1]["rcno"].toString(),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold))),
+                              )
+                            : Expanded(child: SizedBox()),
+                      ],
                     ),
-                    title: Text(data[index]["rcno"].toString(),
-                        style: const TextStyle(fontWeight: FontWeight.bold)));
+                    Divider(
+                      height: 1,
+                    )
+                  ],
+                );
               }),
+          SizedBox(
+            height: 30,
+          )
         ],
       ),
     );
+  }
+
+  checkUpdate(context) async {
+    String buildNo;
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    buildNo = packageInfo.version + "(" + packageInfo.buildNumber + ")";
+    CollectionReference ref = FirebaseFirestore.instance.collection('version');
+    final snapshot = await ref.doc("version").get();
+    if (snapshot.exists) {
+      Map data = snapshot.data();
+      log("online version" + data["version"]);
+      if (data["version"] != buildNo) {
+        showUpdateDialog(context);
+      }
+    }
   }
 
   bool validate() {
