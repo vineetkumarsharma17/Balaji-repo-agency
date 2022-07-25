@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../constant.dart';
 import '../local_storage_services.dart';
+import '../screens/widgets/widget_build_functions.dart';
 
 class MyDrawer extends StatefulWidget {
   @override
@@ -74,18 +75,17 @@ class _MyDrawerState extends State<MyDrawer> {
                   height: 10,
                 ),
                 Container(
-                  height: 200,
-                  width: 200,
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  height: 300,
+                  //  width: 200,
                   decoration: BoxDecoration(
                     color: Colors.amber,
                     border: Border.all(
                       color: Colors.white,
                     ),
-                    image: const DecorationImage(
-                        image: const AssetImage("assets/images/owner.jpeg"),
-                        fit: BoxFit.fill),
                     borderRadius: BorderRadius.circular(20),
                   ),
+                  child: buildSlideShow(),
                 ),
                 const SizedBox(
                   height: 10,
@@ -119,71 +119,71 @@ class _MyDrawerState extends State<MyDrawer> {
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    launchEmail();
-                  },
-                  child: Card(
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
-                    //padding: EdgeInsets.all(10),
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.email,
-                            color: Colors.teal,
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Expanded(
-                            child: Text(
-                              email,
-                              style: const TextStyle(
-                                  color: Colors.black, fontSize: 10),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    final String url = 'http://parasnathenterprises.online/';
-                    launch(url);
-                  },
-                  child: Card(
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
-                    //padding: EdgeInsets.all(10),
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.earbuds,
-                            color: Colors.teal,
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Expanded(
-                            child: const Text(
-                              "Website",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 15),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     launchEmail();
+                //   },
+                //   child: Card(
+                //     margin:
+                //         const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                //     //padding: EdgeInsets.all(10),
+                //     color: Colors.white,
+                //     child: Padding(
+                //       padding: const EdgeInsets.all(15.0),
+                //       child: Row(
+                //         children: [
+                //           const Icon(
+                //             Icons.email,
+                //             color: Colors.teal,
+                //           ),
+                //           const SizedBox(
+                //             width: 20,
+                //           ),
+                //           Expanded(
+                //             child: Text(
+                //               email,
+                //               style: const TextStyle(
+                //                   color: Colors.black, fontSize: 10),
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // GestureDetector(
+                //   onTap: () {
+                //     final String url = 'http://parasnathenterprises.online/';
+                //     launch(url);
+                //   },
+                //   child: Card(
+                //     margin:
+                //         const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                //     //padding: EdgeInsets.all(10),
+                //     color: Colors.white,
+                //     child: Padding(
+                //       padding: const EdgeInsets.all(15.0),
+                //       child: Row(
+                //         children: [
+                //           const Icon(
+                //             Icons.earbuds,
+                //             color: Colors.teal,
+                //           ),
+                //           const SizedBox(
+                //             width: 20,
+                //           ),
+                //           Expanded(
+                //             child: const Text(
+                //               "Website",
+                //               style:
+                //                   TextStyle(color: Colors.black, fontSize: 15),
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 Text(
                   "Data:$count",
                   style: TextStyle(
@@ -218,13 +218,13 @@ class _MyDrawerState extends State<MyDrawer> {
                                         fontFamily: "Pacifico",
                                         letterSpacing: 3),
                                   ),
-                                  // const Text(
-                                  //   "Contact:+918874327867",
-                                  //   style: TextStyle(
-                                  //     fontSize: 12,
-                                  //     color: Colors.white,
-                                  //   ),
-                                  // ),
+                                  const Text(
+                                    "Contact:+918874327867",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                   Text(
                                     "1.0.0(" + buildNo.toString() + ")",
                                     style: const TextStyle(

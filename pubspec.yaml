@@ -57,7 +57,7 @@ dependencies:
   permission_handler: ^10.0.0
   open_file: ^3.2.1
   # xml: ^5.0.0
-  # whatsapp_share: ^1.1.1
+  whatsapp_share: ^1.1.1
   geolocator: ^9.0.1
   geocoding: ^2.0.4
   
@@ -103,10 +103,10 @@ flutter:
   fonts:
     - family: Pacifico
       fonts:
-        - asset: fonts/nameFont.ttf
+        - asset: assets/fonts/nameFont.ttf
     - family: Anton
       fonts:
-        - asset: fonts/Anton.ttf
+        - asset: assets/fonts/Anton.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

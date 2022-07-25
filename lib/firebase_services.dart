@@ -287,12 +287,12 @@ class FirebaseServices {
             context,
             "Update",
             () {
-              final Uri url = Uri.parse('http://parasnathenterprises.online/');
+              final Uri url = Uri.parse(webLink);
               launchUrl(url, mode: LaunchMode.externalNonBrowserApplication);
             },
             "Not Now",
             () {
-              // Navigator.pop(context);
+              Navigator.pop(context);
             },
             true);
       }
