@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>404787619191-q4kh9bjmlahj640m2e9cdro1t7kkdvb2.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.404787619191-q4kh9bjmlahj640m2e9cdro1t7kkdvb2</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>404787619191-ic77lb86ajq72k2bbr39cdk90tgmnr87.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCbTsfexazsAxu_gynYKHJeEkiOu26ClVE</string>
+	<key>GCM_SENDER_ID</key>
+	<string>404787619191</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.balajiRepoAgency</string>
+	<key>PROJECT_ID</key>
+	<string>balajirepo-a4074</string>
+	<key>STORAGE_BUCKET</key>
+	<string>balajirepo-a4074.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:404787619191:ios:20bf1712deb8fff4182d72</string>
+	<key>DATABASE_URL</key>
+	<string>https://balajirepo-a4074-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
