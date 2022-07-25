@@ -1,10 +1,25 @@
+import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
-openwhatsapp(String msg,context) async{
-  await Share.share(msg);
+// import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+// import 'package:whatsapp_share/whatsapp_share.dart';
 
-  // // var whatsapp = "+919369640153";
-  // var whatsappURl_android = "whatsapp://send?&text=$msg";
-  //  showDialog<void>(
+import '../constant.dart';
+// import 'package:whatsapp_share/whatsapp_share.dart';
+
+opentowhatsapp(String msg, context) async {
+  // await WhatsappShare.share(
+  //   text: msg,
+  //   phone: '91$mob',
+  // ).then((value) async {
+  //   if (value == false) {
+  //     await Share.share(msg);
+  //   }
+  // });
+  // var whatsapp = "+919369640153";
+  //var whatsappURl_android = "whatsapp://send?+91$mob&text=$msg";
+  // var whatsappURl_android = "https://wa.me/${mob}?text=$msg";
+  // showDialog<void>(
   //   context: context,
   //   barrierDismissible: false, // user must tap button!
   //   builder: (BuildContext context) {
@@ -21,12 +36,17 @@ openwhatsapp(String msg,context) async{
   //         TextButton(
   //           child: const Text('Yes'),
   //           onPressed: () async {
-  //             if (await canLaunch(whatsappURl_android)) {
-  //               await launch(whatsappURl_android);
-  //             } else {
-  //               ScaffoldMessenger.of(context).showSnackBar(
-  //                   SnackBar(content: new Text("whatsapp no installed")));
-  //             }
+  //             await WhatsappShare.share(
+  //               text: 'Whatsapp share text',
+  //               linkUrl: 'https://flutter.dev/',
+  //               phone: '91$mob',
+  //             );
+  // if (await canLaunch(whatsappURl_android)) {
+  //   await launch(whatsappURl_android);
+  // } else {
+  //   ScaffoldMessenger.of(context)
+  //       .showSnackBar(const SnackBar(content: Text("Something went wrong.")));
+  // }
   //             Navigator.of(context).pop();
   //           },
   //         ),

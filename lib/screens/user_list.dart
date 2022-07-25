@@ -2,154 +2,181 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:balaji_repo_agency/component/alertdilog.dart';
-import 'package:balaji_repo_agency/component/drawer.dart';
-import 'package:balaji_repo_agency/component/snack_bar.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../Screens/widgets/widget_build_functions.dart';
+import '../firebase_services.dart';
+import 'package:share_plus/share_plus.dart';
 
-class User_List extends StatefulWidget {
-  const User_List({Key key}) : super(key: key);
+import '../component/drawer.dart';
+import '../constant.dart';
+
+class UserListScreen extends StatefulWidget {
+  const UserListScreen({Key? key}) : super(key: key);
 
   @override
-  State<User_List> createState() => _User_ListState();
+  State<UserListScreen> createState() => _UserListScreenState();
 }
 
-class _User_ListState extends State<User_List> {
-  List data = [];
-  bool loading = false;
-  CollectionReference phone = FirebaseFirestore.instance.collection('phone');
-  Future getDocs() async {
-    QuerySnapshot querySnapshot = await phone.get().then((querySnapshot) {
-      final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-      setState(() {
-        data = allData;
-        loading = true;
-      });
-      log(data.toString());
-      return querySnapshot;
-    }).catchError((e) {
-      log(e.toString());
-      showSnackBar(e.toString(), context);
-      setState(() {
-        loading = true;
-      });
-    });
-
-    // Get data from docs and convert map to List
-  }
-
+class _UserListScreenState extends State<UserListScreen> {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getDocs();
   }
 
+  TextStyle keyTextStyle = const TextStyle(fontWeight: FontWeight.bold);
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.teal,
-      appBar: AppBar(
-        title: const Text("Bala ji Repo Agency"),
-        actions: [
-          Padding(
-              padding: const EdgeInsets.only(right: 15.0),
-              child: IconButton(
-                  onPressed: () => showExitDialog(
-                      "Alert!", "Are you sure to exit?", context),
-                  icon: Icon(Icons.logout))),
-        ],
-        // automaticallyImplyLeading: false,
-      ),
       drawer: MyDrawer(),
-      body: loading
-          ? Container(
-              margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-              child: ListView.builder(
-                  // physics: NeverScrollableScrollPhysics(),
-                  // shrinkWrap: true,
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    Map detail = data[index];
-                    return Card(
-                      //color: Colors.w,
-                      child: Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Column(
-                          children: [
-                            ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: detail.length,
-                                itemBuilder: (context, i) {
-                                  String key = detail.keys.elementAt(i);
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 4),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          margin: const EdgeInsets.only(top: 3),
-                                          width: width * .35,
-                                          child: Text(
-                                            "$key",
-                                            style: const TextStyle(
-                                                color: Colors.black),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: const EdgeInsets.only(top: 3),
-                                          width: width * .02,
-                                          child: const Text(
-                                            ":",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black),
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: const EdgeInsets.only(top: 3),
-                                          width: width * .35,
-                                          child: Text(
-                                            "${detail[key]}",
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black),
-                                          ),
-                                        ),
-                                        key == "number"
-                                            ? IconButton(
-                                                onPressed: () {
-                                                  launchCaller(detail[key]);
-                                                },
-                                                icon: Icon(Icons.call))
-                                            : SizedBox()
-                                      ],
-                                    ),
-                                  );
-                                })
-                          ],
+      appBar: buildAppBar(context),
+      body: StreamBuilder(
+        stream: users.snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          //  log(snapshot.toString());
+
+          if (!snapshot.hasData) {
+            return const Padding(
+              padding: EdgeInsets.all(80.0),
+              child: Center(
+                  child: SpinKitWanderingCubes(
+                color: Colors.green,
+                size: 50.0,
+              )),
+            );
+          } else {
+            List<QueryDocumentSnapshot> usersList = snapshot.data.docs;
+            return ListView.builder(
+                itemCount: usersList.length,
+                itemBuilder: ((context, index) {
+                  Map data = usersList[index].data() as Map;
+                  log(data.toString());
+                  return Slidable(
+                    startActionPane: ActionPane(
+                      // A motion is a widget used to control how the pane animates.
+                      motion: const ScrollMotion(),
+
+                      // All actions are defined in the children parameter.
+                      children: [
+                        // A SlidableAction can have an icon and/or a label.
+                        SlidableAction(
+                          onPressed: (context) {
+                            FirebaseServices().deleteFireStoreData(
+                                users, usersList[index].id, context);
+                          },
+                          backgroundColor: Color(0xFFFE4A49),
+                          foregroundColor: Colors.white,
+                          icon: Icons.delete,
+                          label: 'Delete',
                         ),
+                      ],
+                    ),
+                    endActionPane: ActionPane(
+                      motion: ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                          onPressed: (context) {
+                            FirebaseServices().deleteFireStoreData(
+                                users, usersList[index].id, context);
+                          },
+                          backgroundColor: Color(0xFFFE4A49),
+                          foregroundColor: Colors.white,
+                          icon: Icons.delete,
+                          label: 'Delete',
+                        ),
+                      ],
+                    ),
+                    child: Card(
+                        child: ListTile(
+                      onTap: (() {
+                        share(usersList[index].id, data["password"],
+                            data["role"]);
+                      }),
+                      leading: CircleAvatar(
+                        child: Icon(Icons.person),
                       ),
-                    );
-                  }))
-          : const Center(
-              child: CircularProgressIndicator(
-                color: Colors.white,
-              ),
-            ),
+                      title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                    child: Text(
+                                  "Name :",
+                                  style: keyTextStyle,
+                                )),
+                                Text(data["name"] ?? "Not Found"),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                    child: Text(
+                                  "Mobile :",
+                                  style: keyTextStyle,
+                                )),
+                                Text(usersList[index].id),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                    child: Text(
+                                  "Password :",
+                                  style: keyTextStyle,
+                                )),
+                                Text(data["password"] ?? "Not Found"),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                    child: Text(
+                                  "Role :",
+                                  style: keyTextStyle,
+                                )),
+                                Text(data["role"].toUpperCase() ?? "Not Found"),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                    child: Text(
+                                  "City :",
+                                  style: keyTextStyle,
+                                )),
+                                Text(data["city"] ?? "Not Found"),
+                              ],
+                            ),
+                          ]),
+                    )),
+                  );
+                }));
+          }
+        },
+      ),
     );
   }
 
-  launchCaller(String num) async {
-    String url = "tel:$num";
-    log(url);
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+  void share(String mobile, String pass, String role) async {
+    String msg =
+        "Hi I Invited you on $companyName app as ${role.toUpperCase()}.Please download our app from $webLink\n";
+    msg += "Your User id-$mobile\n";
+    msg += "Your password-${pass}";
+    await Share.share(msg);
   }
 }

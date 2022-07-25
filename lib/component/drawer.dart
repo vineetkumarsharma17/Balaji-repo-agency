@@ -1,6 +1,15 @@
+// import 'package:balaji_repo_agency/component/constant.dart';
+// import 'package:balaji_repo_agency/screens/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path/path.dart';
+// import 'package:package_info_plus/package_info_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
+
+import '../constant.dart';
+import '../local_storage_services.dart';
 
 class MyDrawer extends StatefulWidget {
   @override
@@ -8,12 +17,22 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  String buildNo = '';
-
+  int buildNo = 0;
+  String name = '';
+  bool isAdmin = false;
+  String city = '';
+  int count = 0;
   appVer() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    count = await LocalStorage.getLocalDataCount();
+    setState(() {
+      name = preferences.getString("name") ?? "";
+      city = preferences.getString("city") ?? "";
+      isAdmin = (preferences.getString("type") == "admin");
+    });
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     setState(() {});
-    buildNo = packageInfo.version + "(" + packageInfo.buildNumber + ")";
+    buildNo = int.parse(packageInfo.buildNumber);
   }
 
   initState() {
@@ -24,7 +43,7 @@ class _MyDrawerState extends State<MyDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-          color: Colors.teal,
+          color: primaryColor,
           child: SafeArea(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -32,45 +51,48 @@ class _MyDrawerState extends State<MyDrawer> {
                 const SizedBox(
                   height: 20,
                 ),
-                const Text(
-                  "Bala ji Repo",
-                  style: TextStyle(
-                      fontSize: 30,
-                      color: Colors.white,
-                      fontFamily: "Anton",
-                      letterSpacing: 3),
-                ),
+                // const CircleAvatar(
+                //   radius: 30,
+                //   backgroundImage: AssetImage('assets/images/logo.jpeg'),
+                // ),
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
-                const CircleAvatar(
-                  backgroundColor: Colors.white,
-                  radius: 62,
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage("assets/images/pic.jpeg"),
-                    radius: 60,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Text(
-                  "Sumit Tiwari",
-                  style: TextStyle(
-                      fontSize: 30,
+                Center(
+                  child: Text(
+                    companyName,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 25,
+                      letterSpacing: 3,
                       color: Colors.white,
                       fontFamily: "Pacifico",
-                      letterSpacing: 3),
-                ),
-                SizedBox(
-                  width: 150,
-                  child: Divider(
-                    color: Colors.teal[100],
+                    ),
                   ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: 200,
+                  width: 200,
+                  decoration: BoxDecoration(
+                    color: Colors.amber,
+                    border: Border.all(
+                      color: Colors.white,
+                    ),
+                    image: const DecorationImage(
+                        image: const AssetImage("assets/images/owner.jpeg"),
+                        fit: BoxFit.fill),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 GestureDetector(
                   onTap: () {
-                    launchCaller("9634123672");
+                    launchCaller(mob);
                   },
                   child: Card(
                     margin:
@@ -80,17 +102,17 @@ class _MyDrawerState extends State<MyDrawer> {
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: Row(
-                        children: const [
-                          Icon(
+                        children: [
+                          const Icon(
                             Icons.call,
                             color: Colors.teal,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(
-                            "+919634123672",
-                            style: TextStyle(color: Colors.black),
+                            "+91$mob",
+                            style: const TextStyle(color: Colors.black),
                           ),
                         ],
                       ),
@@ -99,7 +121,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    launchCaller("9634123672");
+                    launchEmail();
                   },
                   child: Card(
                     margin:
@@ -109,68 +131,113 @@ class _MyDrawerState extends State<MyDrawer> {
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: Row(
-                        children: const [
-                          Icon(
-                            Icons.email_outlined,
+                        children: [
+                          const Icon(
+                            Icons.email,
                             color: Colors.teal,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
-                          Text(
-                            "sumit35@gmail.com",
-                            style: TextStyle(color: Colors.black),
+                          Expanded(
+                            child: Text(
+                              email,
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 10),
+                            ),
                           ),
                         ],
                       ),
                     ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    final String url = 'http://parasnathenterprises.online/';
+                    launch(url);
+                  },
+                  child: Card(
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                    //padding: EdgeInsets.all(10),
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.earbuds,
+                            color: Colors.teal,
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Expanded(
+                            child: const Text(
+                              "Website",
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 15),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Text(
+                  "Data:$count",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.white,
                   ),
                 ),
                 Expanded(
                     child: GestureDetector(
-                  onTap: () {
-                    launchCaller("8874327867");
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    // color: Colors.white,
-                    alignment: Alignment.bottomCenter,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const Text(
-                          "App is developed by",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const Text(
-                          "vSafe Software Solution",
-                          style: TextStyle(
-                              fontSize: 17,
-                              color: Colors.white,
-                              fontFamily: "Pacifico",
-                              letterSpacing: 3),
-                        ),
-                        const Text(
-                          "Contact:+918874327867",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          buildNo,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ))
+                        onTap: () {
+                          launchCaller("8874327867");
+                        },
+                        child: Container(
+                            margin: const EdgeInsets.only(bottom: 20),
+                            // color: Colors.white,
+                            alignment: Alignment.bottomCenter,
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  const Text(
+                                    "App is developed by",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const Text(
+                                    "vSafe Software Solution",
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        color: Colors.white,
+                                        fontFamily: "Pacifico",
+                                        letterSpacing: 3),
+                                  ),
+                                  // const Text(
+                                  //   "Contact:+918874327867",
+                                  //   style: TextStyle(
+                                  //     fontSize: 12,
+                                  //     color: Colors.white,
+                                  //   ),
+                                  // ),
+                                  Text(
+                                    "1.0.0(" + buildNo.toString() + ")",
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ])))),
+
+                //       ],
+                //     ),
+                //   ),
+                // ))
               ],
             ),
           )),
@@ -184,6 +251,15 @@ class _MyDrawerState extends State<MyDrawer> {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  launchEmail() async {
+    final Uri emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: email,
+    );
+
+    // launchUrl(emailLaunchUri);
   }
 }
 
