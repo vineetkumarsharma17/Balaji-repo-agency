@@ -68,6 +68,8 @@ class LocalStorage {
     await database!
         .query("data",
             limit: 200,
+            distinct: true,
+            columns: ["Registration_No", "Chassis_no"],
             where: query.isEmpty
                 ? "Registration_No!=''"
                 : isRc

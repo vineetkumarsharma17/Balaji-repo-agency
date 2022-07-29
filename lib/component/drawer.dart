@@ -253,14 +253,14 @@ class _MyDrawerState extends State<MyDrawer> {
     }
   }
 
-  launchEmail() async {
-    final Uri emailLaunchUri = Uri(
-      scheme: 'mailto',
-      path: email,
-    );
+  // launchEmail() async {
+  //   final Uri emailLaunchUri = Uri(
+  //     scheme: 'mailto',
+  //     path: email,
+  //   );
 
-    // launchUrl(emailLaunchUri);
-  }
+  //   // launchUrl(emailLaunchUri);
+  // }
 }
 
 

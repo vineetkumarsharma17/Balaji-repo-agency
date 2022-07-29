@@ -97,40 +97,44 @@ class _DetailScreenState extends State<DetailScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
+          Expanded(
+            child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: primaryColor,
+                      offset: const Offset(0.0, 0.0), //(x,y)
+                      blurRadius: 12.0,
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    width: .5,
                     color: primaryColor,
-                    offset: const Offset(0.0, 0.0), //(x,y)
-                    blurRadius: 12.0,
                   ),
-                ],
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  width: .5,
-                  color: primaryColor,
                 ),
-              ),
-              height: 500,
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  buildRow("Name", data["Name"] ?? "NULL"),
-                  buildRow("Father", data["Father_Name"] ?? "NULL"),
-                  buildRow("Registration No", widget.registration_no),
-                  buildRow("Loan No", data["Loan_No"] ?? "NULL"),
-                  buildRow("Asset", data["Asset"] ?? "NULL"),
-                  buildRow("Engine No", data["Engine_No"] ?? "NULL"),
-                  buildRow("Chasiss No", widget.chasiss_no),
-                  buildRow("Bucket", data["Bucket"] ?? "NULL"),
-                  buildRow("Total Due", data["Total_Due"] ?? "NULL"),
-                  buildRow("ASD", data["ASD"] ?? "NULL"),
-                ],
-              )),
+                //height: 500,
+                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    buildRow("Name", data["Name"] ?? "NULL"),
+                    buildRow("Address", data["Address"] ?? "NULL"),
+                    buildRow("Registration No", widget.registration_no),
+                    buildRow("Loan No", data["Loan_No"] ?? "NULL"),
+                    buildRow("Asset", data["Asset"] ?? "NULL"),
+                    buildRow("Engine No", data["Engine_No"] ?? "NULL"),
+                    buildRow("Chasiss No", widget.chasiss_no),
+                    buildRow("Bucket", data["Bucket"] ?? "NULL"),
+                    buildRow("EMI Ammount", data["EMI_Ammount"] ?? "NULL"),
+                    buildRow("Total Pos", data["Total_Pos"] ?? "NULL"),
+                    buildRow("Total Penalty", data["Total_Penalty"] ?? "NULL"),
+                    buildRow("Agency Name", data["Agency_Name"] ?? "NULL"),
+                  ],
+                )),
+          ),
           !loading
               ? buildButton("Share", () {
                   String msg = "$companyName";
