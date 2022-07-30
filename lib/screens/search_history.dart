@@ -140,7 +140,7 @@ class _SearchHistoryScreenState extends State<SearchHistoryScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      drawer: MyDrawer(),
+      // drawer: MyDrawer(),
       appBar: buildAppBar(context),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,

@@ -30,7 +30,7 @@ class _UserListScreenState extends State<UserListScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      drawer: MyDrawer(),
+      // drawer: MyDrawer(),
       appBar: buildAppBar(context),
       body: StreamBuilder(
         stream: users.snapshots(),

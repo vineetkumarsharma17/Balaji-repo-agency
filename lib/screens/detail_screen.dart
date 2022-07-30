@@ -93,7 +93,7 @@ class _DetailScreenState extends State<DetailScreen> {
     width = MediaQuery.of(context).size.width - 40;
     return Scaffold(
       appBar: buildAppBar(context),
-      drawer: MyDrawer(),
+      // drawer: MyDrawer(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

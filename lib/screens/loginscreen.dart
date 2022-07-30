@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        drawer: MyDrawer(),
+        // drawer: MyDrawer(),
         appBar: AppBar(title: Text(companyName)),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),

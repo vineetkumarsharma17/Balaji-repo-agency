@@ -47,7 +47,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
           appBar: buildAppBar(context),
-          drawer: MyDrawer(),
+          // drawer: MyDrawer(),
           body: ListView(
             children: [
               !loading
