@@ -57,12 +57,17 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
                         const SizedBox(
                           height: 20,
                         ),
-                        const Text(
-                          'Welcome Admin ',
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.teal,
+                        GestureDetector(
+                          onTap: () {
+                            HttpService.fetchData(context, "");
+                          },
+                          child: const Text(
+                            'Welcome Admin ',
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.teal,
+                            ),
                           ),
                         ),
                         Padding(

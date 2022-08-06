@@ -121,6 +121,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     buildRow("Name", data["Name"] ?? "NULL"),
+                    buildRow("Father Name", data["Father"] ?? "NULL"),
                     buildRow("Address", data["Address"] ?? "NULL"),
                     buildRow("Registration No", widget.registration_no),
                     buildRow("Loan No", data["Loan_No"] ?? "NULL"),
@@ -131,6 +132,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     buildRow("EMI Ammount", data["EMI_Ammount"] ?? "NULL"),
                     buildRow("Total Pos", data["Total_Pos"] ?? "NULL"),
                     buildRow("Total Penalty", data["Total_Penalty"] ?? "NULL"),
+                    buildRow("Company Name", data["Company"] ?? "NULL"),
                     buildRow("Agency Name", data["Agency_Name"] ?? "NULL"),
                   ],
                 )),

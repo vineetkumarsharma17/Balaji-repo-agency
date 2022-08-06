@@ -21,6 +21,7 @@ class _SearchScreenState extends State<SearchScreen> {
   var rcCtrl = TextEditingController();
   var chassisCtrl = TextEditingController();
   List data = [];
+  List data2 = [];
   bool loading = false;
   int count = 0;
   // List<String> chassisList = [];
@@ -49,8 +50,9 @@ class _SearchScreenState extends State<SearchScreen> {
       // });
       setState(() {
         //  data = [];
-
-        data = value;
+        int len = (value.length / 2).toInt();
+        data = value.sublist(0, len);
+        data2 = value.sublist(len, value.length);
         loading = false;
         // log(data.last["Registration_No"]);
       });
@@ -65,6 +67,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    log("data 1:" + data.length.toString());
+    log("data 2:" + data2.length.toString());
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -82,7 +86,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Text(
-                "Searched Data:${data.length}",
+                "Searched Data:${data.length + data2.length}",
                 style: TextStyle(fontWeight: FontWeight.bold),
               )
             ],
@@ -114,11 +118,14 @@ class _SearchScreenState extends State<SearchScreen> {
                       child: ListView.builder(
                           keyboardDismissBehavior:
                               ScrollViewKeyboardDismissBehavior.onDrag,
-                          itemCount: data.length >= 2
-                              ? data.length % 2 == 0
-                                  ? (data.length / 2).toInt()
-                                  : (data.length / 2).toInt() + 1
-                              : data.length,
+                          itemCount: data.length > data2.length
+                              ? data.length
+                              : data2.length,
+                          // itemCount: data.length >= 2
+                          //     ? data.length % 2 == 0
+                          //         ? (data.length / 2).toInt()
+                          //         : (data.length / 2).toInt() + 1
+                          //     : data.length,
                           itemBuilder: ((context, index) {
                             int count = data.length >= 2
                                 ? data.length % 2 == 0
@@ -141,16 +148,16 @@ class _SearchScreenState extends State<SearchScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => DetailScreen(
-                                                registration_no: data[2 * index]
+                                                registration_no: data[index]
                                                     ["Registration_No"],
-                                                chasiss_no: data[2 * index]
+                                                chasiss_no: data[index]
                                                     ["Chassis_no"])));
                                   },
                                   child: Card(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
-                                        data[2 * index]["Registration_No"],
+                                        data[index]["Registration_No"],
                                         style: const TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold),
@@ -159,7 +166,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   ),
                                 )),
                                 Expanded(
-                                    child: data.length - 1 >= 2 * index + 1
+                                    child: data2.length > index
                                         ? GestureDetector(
                                             onTap: () {
                                               FirebaseServices()
@@ -170,13 +177,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           DetailScreen(
-                                                            registration_no: data[
-                                                                    2 * index +
-                                                                        1][
+                                                            registration_no: data2[
+                                                                    index][
                                                                 "Registration_No"],
-                                                            chasiss_no: data[
-                                                                    2 * index +
-                                                                        1]
+                                                            chasiss_no: data2[
+                                                                    index]
                                                                 ["Chassis_no"],
                                                           )));
                                             },
@@ -185,7 +190,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                 padding:
                                                     const EdgeInsets.all(8.0),
                                                 child: Text(
-                                                  data[2 * index + 1]
+                                                  data2[index]
                                                       ["Registration_No"],
                                                   style: const TextStyle(
                                                       fontSize: 20,

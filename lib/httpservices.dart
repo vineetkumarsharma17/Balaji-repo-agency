@@ -73,17 +73,23 @@ class HttpService {
         .post(Uri.parse(apiLink + "fetchData.php"), body: jsonEncode(prm))
         .then((res) {
       // log("status code:" + res.statusCode.toString());
-      if (res.statusCode == 200) {
-        var obj = jsonDecode(res.body);
-        if (obj["status"] == 1) {
-          log("get data");
-          List data = obj["data"];
-          // log(data.last.toString());
-          LocalStorage.insertRecord(data);
-          LocalStorage.checkCountAndFetchData(context);
-        }
-        // if (obj["status"] == 1) return int.parse(obj["count"]);
+      // log("res:" + res.body.toString());
+      try {
+        if (res.statusCode == 200) {
+          var obj = json.decode(res.body);
+          // log("status co" + obj["status"]);
+          if (obj["status"] == 1) {
+            log("get data");
+            List data = obj["data"];
+            log(data.last.toString());
+            LocalStorage.insertRecord(data);
+            LocalStorage.checkCountAndFetchData(context);
+          }
+          // if (obj["status"] == 1) return int.parse(obj["count"]);
 
+        }
+      } catch (e) {
+        log("Error in res:" + e.toString());
       }
     }).timeout(const Duration(seconds: 34), onTimeout: () {
       showSnackBar("Time out", context);

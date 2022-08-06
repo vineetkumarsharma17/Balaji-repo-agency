@@ -57,7 +57,12 @@ class LocalStorage {
     //  log(data.length.toString());
     for (Map<String, dynamic> x in data) {
       //log(x.toString());
-      database!.insert("data", x, conflictAlgorithm: ConflictAlgorithm.replace);
+      database!
+          .insert("data", x, conflictAlgorithm: ConflictAlgorithm.replace)
+          .onError((error, stackTrace) {
+        log(error.toString());
+        return 0;
+      });
     }
     //  getData();
   }
