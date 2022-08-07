@@ -14,14 +14,14 @@ class HttpService {
     await http
         .post(Uri.parse(apiLink + "getrecordcount.php"), body: null)
         .then((res) {
-      log("status code:" + res.statusCode.toString());
+      print("status code:" + res.statusCode.toString());
 
       if (res.statusCode == 200) {
         var obj = jsonDecode(res.body);
 
         if (obj["status"] == 1) {
           count = int.parse(obj["count"]);
-          // log(count.toString());
+          // print(count.toString());
           return count;
         }
       } else {
@@ -43,14 +43,14 @@ class HttpService {
     await http
         .post(Uri.parse(apiLink + "getDetail.php"), body: jsonEncode(prm))
         .then((res) {
-      log("status code:" + res.statusCode.toString());
+      print("status code:" + res.statusCode.toString());
 
       if (res.statusCode == 200) {
         var obj = jsonDecode(res.body);
 
         if (obj["status"] == 1) {
           data = obj["data"][0];
-          log(data.toString());
+          print(data.toString());
           return data;
         }
       } else {
@@ -67,29 +67,29 @@ class HttpService {
   }
 
   static Future<void> fetchData(context, String limit) async {
-    log("fetching data limit $limit");
+    print("fetching data limit $limit");
     Map<String, dynamic> prm = {"id": limit};
     await http
         .post(Uri.parse(apiLink + "fetchData.php"), body: jsonEncode(prm))
         .then((res) {
-      // log("status code:" + res.statusCode.toString());
-      // log("res:" + res.body.toString());
+      // print("status code:" + res.statusCode.toString());
+      // print("res:" + res.body.toString());
       try {
         if (res.statusCode == 200) {
           var obj = json.decode(res.body);
-          // log("status co" + obj["status"]);
+          // print("status co" + obj["status"]);
           if (obj["status"] == 1) {
-            log("get data");
+            // print("get data");
             List data = obj["data"];
-            log(data.last.toString());
-            LocalStorage.insertRecord(data);
-            LocalStorage.checkCountAndFetchData(context);
+            print("get record:" + data.length.toString());
+            LocalStorage.insertRecord(data)
+                .then((value) => LocalStorage.checkCountAndFetchData(context));
           }
           // if (obj["status"] == 1) return int.parse(obj["count"]);
 
         }
       } catch (e) {
-        log("Error in res:" + e.toString());
+        print("Error in res:" + e.toString());
       }
     }).timeout(const Duration(seconds: 34), onTimeout: () {
       showSnackBar("Time out", context);
@@ -105,7 +105,7 @@ class HttpService {
     await http
         .post(Uri.parse(apiLink + "clearData.php"), body: null)
         .then((res) {
-      log("status code:" + res.statusCode.toString());
+      print("status code:" + res.statusCode.toString());
 
       if (res.statusCode == 200) {
         var obj = jsonDecode(res.body);

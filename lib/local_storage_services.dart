@@ -35,7 +35,7 @@ class LocalStorage {
           HttpService.fetchData(context, localCount.toString());
         }
       }
-      if (localCount > count) {
+      if (localCount > count && count > 0) {
         clearDatabase();
         checkCountAndFetchData(context);
       }
@@ -53,17 +53,32 @@ class LocalStorage {
     }
   }
 
-  static insertRecord(List data) {
+  static Future<int> insertRecord(List data) async {
     //  log(data.length.toString());
+    // String sql = "Insert into data VALUES ";
+    int id = 0;
     for (Map<String, dynamic> x in data) {
       //log(x.toString());
-      database!
-          .insert("data", x, conflictAlgorithm: ConflictAlgorithm.replace)
-          .onError((error, stackTrace) {
-        log(error.toString());
-        return 0;
-      });
+      try {
+        id = await database!
+            .insert("data", x, conflictAlgorithm: ConflictAlgorithm.replace)
+            .onError((error, stackTrace) {
+          print("Database error:" + error.toString());
+          return 0;
+        });
+      } catch (e) {
+        print("Database error:" + e.toString());
+      }
     }
+    // log(sql.substring(0, sql.length - 1));
+    // try {
+    //   await database!.rawInsert(sql).then((value) => log("inserted id:$value"));
+    // } catch (e) {
+    //   log("isert error: $e");
+    // }
+
+    return id;
+
     //  getData();
   }
 
