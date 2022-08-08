@@ -43,26 +43,32 @@ class LocalStorage {
   }
 
   static Future<int> getLocalDataCount() async {
-    var count = await Sqflite.firstIntValue(
-        await database!.rawQuery('SELECT COUNT(*) FROM data'));
-    // List<Map> list = await database!.rawQuery('desc data');
-    if (count != null) {
-      return count;
-    } else {
-      return 0;
+    var count = 0;
+    List data = await database!
+        .rawQuery("Select id from data order by id Desc limit 1");
+    if (data.length == 1) {
+      count = data.first["id"];
     }
+    // await Sqflite.firstIntValue(
+    //     await database!.rawQuery('SELECT COUNT(*) FROM data'));
+    // List<Map> list = await database!.rawQuery('desc data');
+
+    return count;
   }
 
   static Future<int> insertRecord(List data) async {
     //  log(data.length.toString());
-    // String sql = "Insert into data VALUES ";
+    String sql = "Insert into data VALUES (";
     int id = 0;
     for (Map<String, dynamic> x in data) {
       //log(x.toString());
       try {
         id = await database!
             .insert("data", x, conflictAlgorithm: ConflictAlgorithm.replace)
-            .onError((error, stackTrace) {
+            .then((value) {
+          log("insert:$value");
+          return value;
+        }).onError((error, stackTrace) {
           print("Database error:" + error.toString());
           return 0;
         });

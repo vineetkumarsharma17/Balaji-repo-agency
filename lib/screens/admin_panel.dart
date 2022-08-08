@@ -60,6 +60,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
                         GestureDetector(
                           onTap: () {
                             HttpService.fetchData(context, "");
+                            // LocalStorage.getLocalDataCount();
                           },
                           child: const Text(
                             'Welcome Admin ',
