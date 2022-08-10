@@ -66,7 +66,7 @@ class LocalStorage {
         id = await database!
             .insert("data", x, conflictAlgorithm: ConflictAlgorithm.replace)
             .then((value) {
-          log("insert:$value");
+          // log("insert:$value");
           return value;
         }).onError((error, stackTrace) {
           print("Database error:" + error.toString());
@@ -97,7 +97,7 @@ class LocalStorage {
             distinct: true,
             columns: ["Registration_No", "Chassis_no"],
             where: query.isEmpty
-                ? "Registration_No!=''"
+                ? "Registration_No!='' AND Registration_No!=' '"
                 : isRc
                     ? "Registration_No Like '%$query' AND Registration_No!=''"
                     : "Registration_No Like '%$query%' AND Registration_No!=''",

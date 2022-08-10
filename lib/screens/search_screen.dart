@@ -22,7 +22,7 @@ class _SearchScreenState extends State<SearchScreen> {
   var chassisCtrl = TextEditingController();
   List data = [];
   List data2 = [];
-  bool loading = false;
+  bool loading = true;
   int count = 0;
   // List<String> chassisList = [];
   @override
@@ -34,9 +34,6 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void getdata(String query, bool isRc) async {
-    setState(() {
-      loading = true;
-    });
     await LocalStorage.getDataByRC(query, isRc).then((value) {
       log("from db" + value.length.toString());
 
@@ -50,14 +47,14 @@ class _SearchScreenState extends State<SearchScreen> {
       // });
       setState(() {
         //  data = [];
-        int len = (value.length / 2).toInt();
+        int len = (value.length / 2).toInt() + 1;
         data = value.sublist(0, len);
         data2 = value.sublist(len, value.length);
         loading = false;
+        // log("length get from database" + value.length.toString());
         // log(data.last["Registration_No"]);
       });
     });
-    log("length load" + data.length.toString());
   }
 
   void getLocalCount() async {
@@ -67,8 +64,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    log("data 1:" + data.length.toString());
-    log("data 2:" + data2.length.toString());
+    // log("data 1:" + data.length.toString());
+    // log("data 2:" + data2.length.toString());
+    // log("total:" + data2.length.toString());
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
