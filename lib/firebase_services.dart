@@ -346,7 +346,8 @@ class FirebaseServices {
           },
           "Cancel",
           () {
-            // Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
           },
           false);
       // Location services are not enabled don't continue
@@ -369,7 +370,8 @@ class FirebaseServices {
               },
               "Cancel",
               () {
-                // Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
               },
               false);
           // Permissions are denied, next time you could try
@@ -391,7 +393,8 @@ class FirebaseServices {
             },
             "Cancel",
             () {
-              // Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
             },
             false);
         // Permissions are denied forever, handle appropriately.
@@ -402,23 +405,24 @@ class FirebaseServices {
         await Geolocator.getCurrentPosition();
         // log(position.toJson().toString());
       } catch (e) {
-        showMyDialog(
-            "Permission Denied",
-            e.toString(),
-            context,
-            "Open Setting",
-            () async {
-              try {
-                await Geolocator.getCurrentPosition()
-                    .then((value) => Navigator.pop(context));
-              } catch (e) {}
-              // await Geolocator.openLocationSettings();
-            },
-            "",
-            () {
-              // Navigator.pop(context);
-            },
-            false);
+        // showMyDialog(
+        //     "Permission Error",
+        //     e.toString(),
+        //     context,
+        //     "Open Setting",
+        //     () async {
+        //       try {
+        //         // await Geolocator.getCurrentPosition()
+        //         //     .then((value) => Navigator.pop(context));
+        //         // await Geolocator.openLocationSettings()
+        //         //     .then((value) => Navigator.pop(context));
+        //       } catch (e) {}
+        //     },
+        //     "Back",
+        //     () {
+        //       Navigator.pop(context);
+        //     },
+        //     false);
       }
     }
   }

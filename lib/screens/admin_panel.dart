@@ -1,11 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:http/http.dart' as http;
 import '../Screens/search_history.dart';
 import '../Screens/search_screen.dart';
 import '../Screens/user_list.dart';
@@ -16,10 +11,6 @@ import '../constant.dart';
 import '../firebase_services.dart';
 import '../httpservices.dart';
 import '../local_storage_services.dart';
-
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../component/drawer.dart';
 
 class AdminPanelScreen extends StatefulWidget {
   @override

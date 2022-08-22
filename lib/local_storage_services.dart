@@ -22,10 +22,9 @@ class LocalStorage {
           .then((value) => log("table Created"));
     });
     preferences = await SharedPreferences.getInstance();
-    checkCountAndFetchData(context);
   }
 
-  static checkCountAndFetchData(context) async {
+  static checkCountAndFetchData() async {
     int localCount = await getLocalDataCount();
     HttpService.getOnlineCount(context).then((count) {
       log("count get:" + count.toString());
@@ -35,9 +34,9 @@ class LocalStorage {
           HttpService.fetchData(context, localCount.toString());
         }
       }
-      if (localCount > count && count > 0) {
+      if (localCount > count && count > 0 && localCount > 0) {
         clearDatabase();
-        checkCountAndFetchData(context);
+        checkCountAndFetchData();
       }
     });
   }
@@ -117,7 +116,7 @@ class LocalStorage {
         .catchError((e) {
       log(e.toString());
     });
-    checkCountAndFetchData(context);
+    checkCountAndFetchData();
     // database!
     //     .delete("data")
     //     .then((value) => log("delete id" + value.toString()));

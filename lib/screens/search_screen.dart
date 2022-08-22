@@ -70,7 +70,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        // drawer: MyDrawer(),
+        drawer: MyDrawer(),
         appBar: buildAppBar(context),
         body: Column(children: [
           const SizedBox(

@@ -14,6 +14,7 @@ import '../firebase_services.dart';
 import '../permission.dart';
 import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../component/drawer.dart';
@@ -43,8 +44,8 @@ class _SearchHistoryScreenState extends State<SearchHistoryScreen> {
 
   exportToExcel(context) async {
     try {
-      PermissionStatus status = await Permission.storage.request();
-      log(status.toString());
+      //  PermissionStatus status = await Permission.storage.request();
+      // log(status.toString());
       var excel = Excel.createExcel();
       Sheet sheetObject = excel[await excel.getDefaultSheet()];
       sheetObject
@@ -75,65 +76,19 @@ class _SearchHistoryScreenState extends State<SearchHistoryScreen> {
         sheetObject
             .cell(CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: i + 1))
             .value = data["location"] ?? "NULL";
-        //i+1 means when the loop iterates every time it will write values in new row, e.g A1, A2, ...
-        // cell.value = data["rc"]; // Insert value to selected cell;
-        // cell.value = dt.toString(); // Insert value to selected cell;
-        // cell.value = dt.toString(); // Insert value to selected cell;
       }
-      const folderName = "Documents";
-      final dir = Directory("storage/emulated/0/$folderName");
-      if (status.isGranted && (await dir.exists())) {
-        String filePath = dir.path;
-        excel.encode().then((onValue) {
-          File file =
-              File(join("$filePath/searchHistory${DateTime.now()}.xlsx"))
-                ..createSync(recursive: true)
-                ..writeAsBytesSync(onValue);
-          OpenFile.open(file.path);
-        });
-      } else if (status.isPermanentlyDenied) {
-        showMyDialog(
-            "Permission",
-            "Please allow storage setting to save pdf.",
-            context,
-            "Open Setting",
-            () async {
-              await openAppSettings();
-            },
-            "Cancel",
-            () {
-              Navigator.pop(context);
-            },
-            true);
-      } else {
-        if (await requestPermission(Permission.storage)) {
-          if (await dir.exists()) {
-            String filePath = dir.path;
-            excel.encode().then((onValue) {
-              File file = File(join("$filePath/PE${DateTime.now()}.xlsx"))
-                ..createSync(recursive: true)
-                ..writeAsBytesSync(onValue);
-              OpenFile.open(file.path);
-            });
-          } else {
-            final folder = await dir.create();
-            if (folder != null) {
-              String filePath = dir.path;
-              excel.encode().then((onValue) {
-                File file = File(join("$filePath/PE${DateTime.now()}.xlsx"))
-                  ..createSync(recursive: true)
-                  ..writeAsBytesSync(onValue);
-                OpenFile.open(file.path);
-              });
-            }
-          }
-        }
+      Directory dir = await getTemporaryDirectory();
+      // final dir = Directory("storage/emulated/0/$folderName");
 
-        log("not exist");
-      }
-    } catch (e) {
-      showSnackBar(e.toString(), context);
-    }
+      String filePath = dir.path;
+      excel.encode().then((onValue) async {
+        String path = "$filePath/searchHistory${DateTime.now()}.xlsx";
+        File file = File(join(path))
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(onValue);
+        await Share.shareFiles([path]);
+      });
+    } catch (e) {}
   }
 
   @override

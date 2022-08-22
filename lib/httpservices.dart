@@ -83,7 +83,7 @@ class HttpService {
             List data = obj["data"];
             print("get record:" + data.length.toString());
             LocalStorage.insertRecord(data)
-                .then((value) => LocalStorage.checkCountAndFetchData(context));
+                .then((value) => LocalStorage.checkCountAndFetchData());
           }
           // if (obj["status"] == 1) return int.parse(obj["count"]);
 

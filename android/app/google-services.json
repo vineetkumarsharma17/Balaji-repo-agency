@@ -1,10 +1,47 @@
 {
   "project_info": {
     "project_number": "404787619191",
+    "firebase_url": "https://balajirepo-a4074-default-rtdb.firebaseio.com",
     "project_id": "balajirepo-a4074",
     "storage_bucket": "balajirepo-a4074.appspot.com"
   },
   "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404787619191:android:b659a2d0508151eb182d72",
+        "android_client_info": {
+          "package_name": "com.balaji_associates_lucknow.vSafe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "404787619191-7u288l5civca9orl304560bv0o25jqrl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAygp1-rxx3Z9GUHEf72JCgdmcMg0Flq9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "404787619191-7u288l5civca9orl304560bv0o25jqrl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "404787619191-q4kh9bjmlahj640m2e9cdro1t7kkdvb2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.balajiRepoAgency"
+              }
+            }
+          ]
+        }
+      }
+    },
     {
       "client_info": {
         "mobilesdk_app_id": "1:404787619191:android:dd8b0fa0615cab87182d72",
@@ -19,6 +56,14 @@
           "android_info": {
             "package_name": "com.example.balaji_repo_agency",
             "certificate_hash": "10057adfb5860dcfa5160e41fa1f96e60abd078e"
+          }
+        },
+        {
+          "client_id": "404787619191-uoh43n5fjd6otmmmo7qofeukuqmouhcp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.balaji_repo_agency",
+            "certificate_hash": "215af8438778faf311d7e46ec2da25f3cd6976a5"
           }
         },
         {
@@ -37,6 +82,13 @@
             {
               "client_id": "404787619191-7u288l5civca9orl304560bv0o25jqrl.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "404787619191-q4kh9bjmlahj640m2e9cdro1t7kkdvb2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.balajiRepoAgency"
+              }
             }
           ]
         }
