@@ -127,7 +127,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     buildRow("Loan No", data["Loan_No"] ?? "NULL"),
                     buildRow("Asset", data["Asset"] ?? "NULL"),
                     buildRow("Engine No", data["Engine_No"] ?? "NULL"),
-                    buildRow("Chasiss No", widget.chasiss_no),
+                    buildRow("Chasiss No", widget.chasiss_no ?? "Null"),
                     buildRow("Bucket", data["Bucket"] ?? "NULL"),
                     buildRow("EMI Ammount", data["EMI_Ammount"] ?? "NULL"),
                     buildRow("Total Pos", data["Total_Pos"] ?? "NULL"),

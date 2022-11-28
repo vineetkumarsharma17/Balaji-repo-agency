@@ -33,12 +33,12 @@ class _MyDrawerState extends State<MyDrawer> {
     });
     await LocalStorage.getLocalDataCount().then((value) {
       setState(() {
-        count = value;
+        count = value["count"];
       });
     });
     HttpService.getOnlineCount(context).then((data) {
       setState(() {
-        onlineCount = data.toString();
+        onlineCount = data["count"].toString();
       });
     });
   }

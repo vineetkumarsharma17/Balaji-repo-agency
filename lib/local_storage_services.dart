@@ -25,34 +25,46 @@ class LocalStorage {
   }
 
   static checkCountAndFetchData() async {
-    int localCount = await getLocalDataCount();
-    HttpService.getOnlineCount(context).then((count) {
-      log("count get:" + count.toString());
-      log("count local:" + localCount.toString());
+    Map data = await getLocalDataCount();
+    int localCount = data["count"];
+    String localfirst = data["first"];
+    HttpService.getOnlineCount(context).then((onlineData) {
+      int count = onlineData["count"];
+      String first = onlineData["first"];
+      log("count get:" + count.toString() + "first online:$first");
+      log("count local:" + localCount.toString() + "first local:$localfirst");
       if (count > 0) {
-        if (localCount < count) {
+        LocalStorage.preferences!.setInt("onlinecount", count);
+        if ((localCount < count && first == localfirst) || localCount == 0) {
           HttpService.fetchData(context, localCount.toString());
         }
       }
-      if (localCount > count && count > 0 && localCount > 0) {
+      if (first != localfirst && count > 0 && localCount > 0) {
         clearDatabase();
         checkCountAndFetchData();
       }
     });
   }
 
-  static Future<int> getLocalDataCount() async {
+  static Future<Map> getLocalDataCount() async {
     var count = 0;
+    String first = '';
     List data = await database!
         .rawQuery("Select id from data order by id Desc limit 1");
     if (data.length == 1) {
       count = data.first["id"];
+      List data2 = await database!
+          .query("data", where: "id=1", columns: ["Registration_No"]);
+      // log("data2:" + data2.first.toString());
+      if (data2.isNotEmpty) {
+        first = data2.first["Registration_No"].toString();
+      }
     }
     // await Sqflite.firstIntValue(
     //     await database!.rawQuery('SELECT COUNT(*) FROM data'));
     // List<Map> list = await database!.rawQuery('desc data');
 
-    return count;
+    return {"count": count, "first": first};
   }
 
   static Future<int> insertRecord(List data) async {

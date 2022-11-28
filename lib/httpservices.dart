@@ -9,8 +9,9 @@ import '../local_storage_services.dart';
 import 'component/snack_bar.dart';
 
 class HttpService {
-  static Future<int> getOnlineCount(context) async {
+  static Future<Map> getOnlineCount(context) async {
     int count = 0;
+    String first = '';
     await http
         .post(Uri.parse(apiLink + "getrecordcount.php"), body: null)
         .then((res) {
@@ -21,11 +22,12 @@ class HttpService {
 
         if (obj["status"] == 1) {
           count = int.parse(obj["count"]);
+          first = obj["first"];
           // print(count.toString());
-          return count;
+          return {"count": count, "first": first};
         }
       } else {
-        return count;
+        return {"count": count, "first": first};
       }
     }).timeout(const Duration(seconds: 34), onTimeout: () {
       showSnackBar("Time out", context);
@@ -34,7 +36,7 @@ class HttpService {
     }).catchError((e) {
       if (e is SocketException) showSnackBar("No internet connection", context);
     });
-    return count;
+    return {"count": count, "first": first};
   }
 
   static Future<Map> getDetail(context, String args) async {
@@ -55,6 +57,40 @@ class HttpService {
         }
       } else {
         return data;
+      }
+    }).timeout(const Duration(seconds: 34), onTimeout: () {
+      showSnackBar("Time out", context);
+
+      throw ("Error");
+    }).catchError((e) {
+      if (e is SocketException) showSnackBar("No internet connection", context);
+    });
+    return data;
+  }
+
+  static Future<List?> getOnlineData(context, String reg) async {
+    List? data = [];
+    Map<String, dynamic> prm = {"reg": reg};
+    data = await http
+        .post(Uri.parse(apiLink + "getOnlineDetail.php"), body: jsonEncode(prm))
+        .then((res) {
+      print("status code:" + res.statusCode.toString());
+      print("res:" + res.body.toString());
+      try {
+        if (res.statusCode == 200) {
+          var obj = json.decode(res.body);
+          // print("status co" + obj["status"]);
+          if (obj["status"] == 1) {
+            // print("get data");
+            data = obj["data"];
+            // print("get record:" + data.length.toString());
+          }
+          // if (obj["status"] == 1) return int.parse(obj["count"]);
+          return data;
+        }
+        return null;
+      } catch (e) {
+        print("Error in res:" + e.toString());
       }
     }).timeout(const Duration(seconds: 34), onTimeout: () {
       showSnackBar("Time out", context);

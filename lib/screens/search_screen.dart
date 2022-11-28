@@ -6,6 +6,7 @@ import '../Screens/detail_screen.dart';
 import '../Screens/widgets/widget_build_functions.dart';
 import '../component/drawer.dart';
 import '../firebase_services.dart';
+import '../httpservices.dart';
 import '../local_storage_services.dart';
 
 import '../constant.dart';
@@ -37,33 +38,54 @@ class _SearchScreenState extends State<SearchScreen> {
     await LocalStorage.getDataByRC(query, isRc).then((value) {
       log("from db" + value.length.toString());
 
-      // value.forEach((val) {
-      //   if (val["Registration_No"].isNotEmpty) {
-      //     if (!data.contains(val["Registration_No"])) {
-      //       data.add(val["Registration_No"]);
-      //       chassisList.add(val["Chassis_no"]);
-      //     }
-      //   }
-      // });
-      setState(() {
-        //  data = [];
-        int len = (value.length / 2).toInt() + 1;
-        data = value.sublist(0, len);
-        data2 = value.sublist(len, value.length);
-        loading = false;
-        // log("length get from database" + value.length.toString());
-        // log(data.last["Registration_No"]);
-      });
+      if (value.length < 1) {
+        setState(() {
+          data.clear();
+          data2.clear();
+          loading = true;
+        });
+        HttpService.getOnlineData(context, query).then((val) {
+          if (val != null && val.isNotEmpty) {
+            setState(() {
+              value = val;
+              int len = value.length > 0 ? (value.length / 2).toInt() + 1 : 0;
+              data = value.sublist(0, len);
+              data2 = value.sublist(len, value.length);
+              loading = false;
+            });
+          } else {
+            setState(() {
+              loading = false;
+            });
+          }
+        });
+      } else {
+        setState(() {
+          //  data = [];
+          int len = value.length > 0 ? (value.length / 2).toInt() + 1 : 0;
+          data = value.sublist(0, len);
+          data2 = value.sublist(len, value.length);
+          loading = false;
+          // log("length get from database" + value.length.toString());
+          // log(data.last["Registration_No"]);
+        });
+      }
     });
   }
 
   void getLocalCount() async {
-    count = await LocalStorage.getLocalDataCount();
-    setState(() {});
+    count =
+        await LocalStorage.getLocalDataCount().then((value) => value["count"]);
+    setState(() {
+      // log("hhkh");
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(Duration(seconds: 5), (() {
+      getLocalCount();
+    }));
     // log("data 1:" + data.length.toString());
     // log("data 2:" + data2.length.toString());
     // log("total:" + data2.length.toString());
@@ -79,9 +101,14 @@ class _SearchScreenState extends State<SearchScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(
-                "Total Data:${count}",
-                style: TextStyle(fontWeight: FontWeight.bold),
+              GestureDetector(
+                onTap: () {
+                  LocalStorage.clearDatabase();
+                },
+                child: Text(
+                  "Total Data:${count}",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
               Text(
                 "Searched Data:${data.length + data2.length}",
@@ -149,7 +176,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                 registration_no: data[index]
                                                     ["Registration_No"],
                                                 chasiss_no: data[index]
-                                                    ["Chassis_no"])));
+                                                    ["Chassis_No"])));
                                   },
                                   child: Card(
                                     child: Padding(
@@ -167,6 +194,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     child: data2.length > index
                                         ? GestureDetector(
                                             onTap: () {
+                                              log(data2[index].toString());
                                               FirebaseServices()
                                                   .checkLocationPermisson(
                                                       context);
@@ -180,7 +208,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                 "Registration_No"],
                                                             chasiss_no: data2[
                                                                     index]
-                                                                ["Chassis_no"],
+                                                                ["Chassis_No"],
                                                           )));
                                             },
                                             child: Card(
