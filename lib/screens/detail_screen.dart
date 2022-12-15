@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:share_plus/share_plus.dart';
 import '../Screens/widgets/widget_build_functions.dart';
 import '../component/drawer.dart';
 import '../firebase_services.dart';
@@ -77,7 +78,8 @@ class _DetailScreenState extends State<DetailScreen> {
             "user": LocalStorage.getName,
             "location": address
           };
-          FirebaseServices().addFireStoreData(searchData, prm, context);
+          if (LocalStorage.getRole == 'user')
+            FirebaseServices().addFireStoreData(searchData, prm, context);
         });
       });
     } catch (e) {
@@ -144,7 +146,8 @@ class _DetailScreenState extends State<DetailScreen> {
                     if (key != "id") msg += "\n$key :$value";
                   }));
                   log(msg);
-                  opentowhatsapp(msg, context);
+                  Share.share(msg);
+                  // opentowhatsapp(msg, context);
                 })
               : const Padding(
                   padding: EdgeInsets.all(20.0),

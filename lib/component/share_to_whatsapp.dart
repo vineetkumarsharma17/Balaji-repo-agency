@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 // import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:whatsapp_share/whatsapp_share.dart';
+// import 'package:whatsapp_share/whatsapp_share.dart';
 
 import '../constant.dart';
 // import 'package:whatsapp_share/whatsapp_share.dart';
 
 opentowhatsapp(String msg, context) async {
-  await WhatsappShare.share(
-    text: msg,
-    phone: '91$mob',
-  ).then((value) async {
-    if (value == false) {
-      await Share.share(msg);
-    }
-  });
+  // await WhatsappShare.share(
+  //   text: msg,
+  //   // phone: '91$mob',
+  // ).then((value) async {
+  //   if (value == false) {
+  //     await Share.share(msg);
+  //   }
+  // });
   // var whatsapp = "+919369640153";
   //var whatsappURl_android = "whatsapp://send?+91$mob&text=$msg";
   // var whatsappURl_android = "https://wa.me/${mob}?text=$msg";

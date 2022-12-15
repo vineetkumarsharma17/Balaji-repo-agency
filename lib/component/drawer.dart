@@ -1,5 +1,6 @@
 // import 'package:balaji_repo_agency/component/constant.dart';
 // import 'package:balaji_repo_agency/screens/user_profile_screen.dart';
+import 'package:balaji_repo_agency/screens/view_user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
@@ -21,7 +22,7 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
   int buildNo = 0;
   String name = '';
-  bool isAdmin = false;
+  bool isUser = false;
   String city = '';
   int count = 0;
   String onlineCount = "Fetching..";
@@ -31,6 +32,7 @@ class _MyDrawerState extends State<MyDrawer> {
         buildNo = int.parse(value.buildNumber);
       });
     });
+    isUser = LocalStorage.getRole == 'user';
     await LocalStorage.getLocalDataCount().then((value) {
       setState(() {
         count = value["count"];
@@ -98,35 +100,38 @@ class _MyDrawerState extends State<MyDrawer> {
                 const SizedBox(
                   height: 10,
                 ),
-                // GestureDetector(
-                //   onTap: () {
-                //     launchCaller(mob);
-                //   },
-                //   child: Card(
-                //     margin:
-                //         const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
-                //     //padding: EdgeInsets.all(10),
-                //     color: Colors.white,
-                //     child: Padding(
-                //       padding: const EdgeInsets.all(15.0),
-                //       child: Row(
-                //         children: [
-                //           const Icon(
-                //             Icons.call,
-                //             color: Colors.teal,
-                //           ),
-                //           const SizedBox(
-                //             width: 20,
-                //           ),
-                //           Text(
-                //             "+91$mob",
-                //             style: const TextStyle(color: Colors.black),
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ViewProfileScreen()));
+                  },
+                  child: Card(
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                    //padding: EdgeInsets.all(10),
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.person,
+                            color: Colors.teal,
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            "Profile",
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
                 SizedBox(height: 10),
                 Text(
                   "Server Data:$onlineCount",

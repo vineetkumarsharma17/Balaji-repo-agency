@@ -35,10 +35,13 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void getdata(String query, bool isRc) async {
-    await LocalStorage.getDataByRC(query, isRc).then((value) {
+    await LocalStorage.getDataByRC(
+            query, isRc, chassisCtrl.text.isEmpty ? "" : chassisCtrl.text)
+        .then((value) {
       log("from db" + value.length.toString());
 
-      if (value.length < 1) {
+      // if (value.length < 1) {
+      if (false) {
         setState(() {
           data.clear();
           data2.clear();
@@ -122,10 +125,10 @@ class _SearchScreenState extends State<SearchScreen> {
               children: [
                 Expanded(
                     child: buildTextField(
-                        rcCtrl, "1234", "Registration No", true)),
+                        chassisCtrl, "UP30AB", "Registration No", false)),
                 Expanded(
                     child: buildTextField(
-                        chassisCtrl, "UP30AB", "Registration No", false))
+                        rcCtrl, "1234", "Registration No", true)),
               ],
             ),
           ),
@@ -244,6 +247,9 @@ class _SearchScreenState extends State<SearchScreen> {
     return TextField(
       controller: ctrl,
       onChanged: (query) {
+        if (isRc && query.length >= 4) {
+          ctrl.clear();
+        }
         setState(() {
           getdata(query, isRc);
         });

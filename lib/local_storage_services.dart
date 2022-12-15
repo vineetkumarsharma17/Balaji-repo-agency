@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:path/path.dart';
@@ -99,7 +100,8 @@ class LocalStorage {
     //  getData();
   }
 
-  static Future<List> getDataByRC(String query, bool isRc) async {
+  static Future<List> getDataByRC(String query, bool isRc,
+      [String pre = ""]) async {
     List data = [];
 
     await database!
@@ -110,7 +112,7 @@ class LocalStorage {
             where: query.isEmpty
                 ? "Registration_No!='' AND Registration_No!=' '"
                 : isRc
-                    ? "Registration_No Like '%$query' AND Registration_No!=''"
+                    ? "Registration_No Like '%$query' AND Registration_No Like '$pre%'  AND Registration_No!=''"
                     : "Registration_No Like '%$query%' AND Registration_No!=''",
             orderBy: 'Registration_No')
         .then((value) => data = value)
@@ -155,6 +157,16 @@ class LocalStorage {
   static String get getName => preferences!.getString("name") ?? getNumber;
   static setName(String name) => preferences!.setString("name", name);
 
+  static Map get getUserProfile {
+    try {
+      return jsonDecode(preferences!.getString("userProfile") ?? "");
+    } catch (e) {
+      return {};
+    }
+  }
+
+  static setUserProfile(Map data) =>
+      preferences!.setString("userProfile", jsonEncode(data));
   static Future<void> logOut() async {
     preferences!.clear();
   }

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import '../Screens/admin_panel.dart';
@@ -72,6 +73,7 @@ class FirebaseServices {
               (value) => log("device is updated"));
           LocalStorage.setLogin();
           LocalStorage.setNumber(num);
+          LocalStorage.setUserProfile(data);
           showSnackBar("Log In Success", context);
           LocalStorage.setRole(data["role"]);
           navigateToHome(context);
@@ -101,6 +103,7 @@ class FirebaseServices {
       if (snapshot.exists) {
         Map data = snapshot.data() as Map;
         log("foundjhh" + data.toString());
+        LocalStorage.setUserProfile(data);
         LocalStorage.setLogin();
         LocalStorage.setNumber(snapshot.id);
         LocalStorage.setRole(data["role"]);
@@ -239,14 +242,29 @@ class FirebaseServices {
     }
   }
 
-  Future<void> updateProfile(String name, String city, context) async {
+  Future<String?> uploadFile(File image, String fileName) async {
+    Reference storageReference = FirebaseStorage.instance.ref();
+    String name = LocalStorage.getNumber + fileName;
+    var snapshot = await storageReference
+        .child("doc")
+        .child(name)
+        .putFile(image)
+        .catchError((e) {
+      return null;
+    });
+    var downloadURL = await snapshot.ref.getDownloadURL();
+    return downloadURL;
+  }
+
+  Future<void> updateProfile(Map<String, dynamic> data, context) async {
     String number = LocalStorage.getNumber;
     log(number);
-    Map<String, Object> data = {"name": name, "city": city};
+
     users.doc(number).update(data).then((value) {
       log("success");
       showSnackBar("Profile updated", context);
       LocalStorage.setRegistered();
+      LocalStorage.setUserProfile(data);
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => const SearchScreen()));
     }).catchError((e) {
