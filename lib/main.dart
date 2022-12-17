@@ -12,7 +12,8 @@ void backgroundFetchHeadlessTask(HeadlessTask task) async {
   if (isTimeout) {
     // This task has exceeded its allowed running-time.  You must stop what you're doing and immediately .finish(taskId)
     print("[BackgroundFetch] Headless task timed-out: $taskId");
-    BackgroundFetch.finish(taskId);
+    LocalStorage.checkCountAndFetchData();
+    // BackgroundFetch.finish(taskId);
     return;
   }
   if (taskId == 'fetchData') {
@@ -20,7 +21,7 @@ void backgroundFetchHeadlessTask(HeadlessTask task) async {
 //TODO: perform your task like : call the API’s, call the DB and local notification.
   }
   print("[BackgroundFetch] Headless event received in main file: $taskId");
-  BackgroundFetch.finish(taskId);
+  // BackgroundFetch.finish(taskId);
 }
 
 void main() async {

@@ -35,12 +35,12 @@ class LocalStorage {
       log("count get:" + count.toString() + "first online:$first");
       log("count local:" + localCount.toString() + "first local:$localfirst");
       if (count > 0) {
-        LocalStorage.preferences!.setInt("onlinecount", count);
+        // LocalStorage.preferences!.setInt("onlinecount", count);
         if ((localCount < count && first == localfirst) || localCount == 0) {
           HttpService.fetchData(context, localCount.toString());
         }
       }
-      if (first != localfirst && count > 0 && localCount > 0) {
+      if (first != '' && localfirst != "" && first != localfirst) {
         clearDatabase();
         checkCountAndFetchData();
       }
@@ -78,7 +78,7 @@ class LocalStorage {
         id = await database!
             .insert("data", x, conflictAlgorithm: ConflictAlgorithm.replace)
             .then((value) {
-          // log("insert:$value");
+          log("insert:$value");
           return value;
         }).onError((error, stackTrace) {
           print("Database error:" + error.toString());

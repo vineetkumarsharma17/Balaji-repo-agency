@@ -75,7 +75,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                             NetworkImage(profile["profilePic"] ?? ""),
                       ),
                       Text(
-                        "Name: " + profile["name"] ?? "Not Found",
+                        "Name: " + profile["name"],
                         style: TextStyle(
                           fontSize: 28,
                           color: Colors.white,
@@ -83,7 +83,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                         ),
                       ),
                       Text(
-                        "Post: " + profile["degignation"] ?? "Not Found",
+                        "Post: " + profile["degignation"],
                         style: TextStyle(
                           fontSize: 17,
                           color: Colors.teal[100],
