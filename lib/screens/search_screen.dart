@@ -249,10 +249,13 @@ class _SearchScreenState extends State<SearchScreen> {
       onChanged: (query) {
         if (isRc && query.length >= 4) {
           ctrl.clear();
-        }
-        setState(() {
           getdata(query, isRc);
-        });
+          return;
+        } else {
+          setState(() {
+            if (!isRc) getdata(query, isRc);
+          });
+        }
       },
       onSubmitted: (val) {
         ctrl.clear();
