@@ -40,8 +40,7 @@ class _SearchScreenState extends State<SearchScreen> {
         .then((value) {
       log("from db" + value.length.toString());
 
-      // if (value.length < 1) {
-      if (false) {
+      if (value.length < 1) {
         setState(() {
           data.clear();
           data2.clear();
