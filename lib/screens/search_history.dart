@@ -16,10 +16,11 @@ import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-
+import 'package:flutter/src/painting/box_border.dart' as boxBorder;
 import '../component/drawer.dart';
 import '../constant.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:path_provider/path_provider.dart' as path;
 
 class SearchHistoryScreen extends StatefulWidget {
   const SearchHistoryScreen({Key? key}) : super(key: key);
@@ -44,10 +45,10 @@ class _SearchHistoryScreenState extends State<SearchHistoryScreen> {
 
   exportToExcel(context) async {
     try {
-      //  PermissionStatus status = await Permission.storage.request();
-      // log(status.toString());
+      PermissionStatus status = await Permission.storage.request();
+      log(status.toString());
       var excel = Excel.createExcel();
-      Sheet sheetObject = excel[await excel.getDefaultSheet()];
+      Sheet sheetObject = excel[await excel.getDefaultSheet() ?? "Sheet1"];
       sheetObject
           .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 0))
           .value = "Registration_No";
@@ -77,18 +78,38 @@ class _SearchHistoryScreenState extends State<SearchHistoryScreen> {
             .cell(CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: i + 1))
             .value = data["location"] ?? "NULL";
       }
-      Directory dir = await getTemporaryDirectory();
-      // final dir = Directory("storage/emulated/0/$folderName");
 
-      String filePath = dir.path;
-      excel.encode().then((onValue) async {
-        String path = "$filePath/searchHistory${DateTime.now()}.xlsx";
-        File file = File(join(path))
-          ..createSync(recursive: true)
-          ..writeAsBytesSync(onValue);
-        await Share.shareFiles([path]);
-      });
-    } catch (e) {}
+      final dir = await path.getTemporaryDirectory();
+      // final dir = Directory("storage/emulated/0/$folderName");
+      if (status.isGranted) {
+        String filePath = dir.path;
+        var onValue = excel.encode();
+        if (onValue != null) {
+          String path = "$filePath/searchHistory${DateTime.now()}.xlsx";
+          File file = File(join(path))
+            ..createSync(recursive: true)
+            ..writeAsBytesSync(onValue);
+          await Share.shareFiles([path]);
+        }
+        // });
+      } else if (status.isPermanentlyDenied) {
+        showMyDialog(
+            "Permission",
+            "Please allow storage setting to save pdf.",
+            context,
+            "Open Setting",
+            () async {
+              await openAppSettings();
+            },
+            "Cancel",
+            () {
+              Navigator.pop(context);
+            },
+            true);
+      }
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
   }
 
   @override
@@ -109,7 +130,7 @@ class _SearchHistoryScreenState extends State<SearchHistoryScreen> {
               margin: const EdgeInsets.symmetric(vertical: 20),
               decoration: BoxDecoration(
                   color: primaryColor,
-                  border: Border.all(color: primaryColor),
+                  border: boxBorder.Border.all(color: primaryColor),
                   borderRadius: BorderRadius.circular(200)),
               child: const Text(
                 "Export to Excel",

@@ -222,10 +222,12 @@ class FirebaseServices {
     String role = LocalStorage.getRole;
     log("role:$role");
     if (role == 'admin') {
+      LocalStorage.checkCountAndFetchData();
       LocalStorage.setRole(role);
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => AdminPanelScreen()));
     } else if (role == 'user') {
+      LocalStorage.checkCountAndFetchData();
       LocalStorage.setRole(role);
       final isProfileSaved = LocalStorage.isRegistered;
       if (isProfileSaved) {
@@ -371,7 +373,6 @@ class FirebaseServices {
       // Location services are not enabled don't continue
       // accessing the position and request users of the
       // App to enable the location services.
-
     } else {
       log(serviceEnabled.toString());
       permission = await Geolocator.checkPermission();
