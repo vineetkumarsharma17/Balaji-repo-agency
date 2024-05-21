@@ -19,7 +19,7 @@ class LocalStorage {
       // When creating the db, create the table
       await db
           .execute(
-              'CREATE TABLE data (id INTEGER PRIMARY KEY, Registration_No TEXT, Chassis_no Text)')
+              'CREATE TABLE data (id INTEGER PRIMARY KEY, Registration_No TEXT, Chassis_No Text,Loan_No Text,Engine_No Text,Asset Text,Bucket Text,TOS Text,Company Text,Branch Text,Name Text)')
           .then((value) => log("table Created"));
     });
     preferences = await SharedPreferences.getInstance();
@@ -78,7 +78,7 @@ class LocalStorage {
         id = await database!
             .insert("data", x, conflictAlgorithm: ConflictAlgorithm.replace)
             .then((value) {
-          log("insert:$value");
+          // log("insert:$value");
           return value;
         }).onError((error, stackTrace) {
           print("Database error:" + error.toString());
@@ -108,7 +108,7 @@ class LocalStorage {
         .query("data",
             limit: 200,
             distinct: true,
-            columns: ["Registration_No", "Chassis_no"],
+            // columns: ["Registration_No", "Chassis_no"],
             where: query.isEmpty
                 ? "Registration_No!='' AND Registration_No!=' '"
                 : isRc

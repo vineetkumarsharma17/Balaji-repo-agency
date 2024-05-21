@@ -15,12 +15,12 @@ import '../component/share_to_whatsapp.dart';
 import '../constant.dart';
 
 class DetailScreen extends StatefulWidget {
-  final registration_no;
-  final chasiss_no;
+  final Map data;
 
-  const DetailScreen(
-      {Key? key, required this.registration_no, required this.chasiss_no})
-      : super(key: key);
+  const DetailScreen({
+    Key? key,
+    required this.data,
+  }) : super(key: key);
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
@@ -41,46 +41,44 @@ class _DetailScreenState extends State<DetailScreen> {
 
   searchDetail() async {
     try {
-      await HttpService.getDetail(context, widget.registration_no)
-          .then((value) async {
-        setState(() {
-          loading = false;
-          data = value;
-        });
-        Position position = await Geolocator.getCurrentPosition();
-        await placemarkFromCoordinates(position.latitude, position.longitude)
-            .then((placemarks) {
-          String? name = placemarks.first.name;
-          String? sublocality = placemarks.first.subLocality;
-          String? locality = placemarks.first.locality;
-          String? postalCode = placemarks.first.postalCode;
-          String? state = placemarks.first.administrativeArea;
-          String address = '';
-          if (name != null) {
-            address += name + ",";
-          }
-          if (sublocality != null) {
-            address += sublocality + ",";
-          }
-          if (locality != null) {
-            address += locality + ",";
-          }
-          if (postalCode != null) {
-            address += postalCode + ",";
-          }
-          if (state != null) {
-            address += state + "";
-          }
-          log("address:" + address);
-          Map<String, dynamic> prm = {
-            "rc": widget.registration_no,
-            "dateTime": Timestamp.now(),
-            "user": LocalStorage.getName,
-            "location": address
-          };
-          if (LocalStorage.getRole == 'user')
-            FirebaseServices().addFireStoreData(searchData, prm, context);
-        });
+      setState(() {
+        loading = false;
+        data = widget.data;
+        log(data.toString());
+      });
+      Position position = await Geolocator.getCurrentPosition();
+      await placemarkFromCoordinates(position.latitude, position.longitude)
+          .then((placemarks) {
+        String? name = placemarks.first.name;
+        String? sublocality = placemarks.first.subLocality;
+        String? locality = placemarks.first.locality;
+        String? postalCode = placemarks.first.postalCode;
+        String? state = placemarks.first.administrativeArea;
+        String address = '';
+        if (name != null) {
+          address += name + ",";
+        }
+        if (sublocality != null) {
+          address += sublocality + ",";
+        }
+        if (locality != null) {
+          address += locality + ",";
+        }
+        if (postalCode != null) {
+          address += postalCode + ",";
+        }
+        if (state != null) {
+          address += state + "";
+        }
+        log("address:" + address);
+        Map<String, dynamic> prm = {
+          "rc": data['Registration_No'],
+          "dateTime": Timestamp.now(),
+          "user": LocalStorage.getName,
+          "location": address
+        };
+        if (LocalStorage.getRole == 'user')
+          FirebaseServices().addFireStoreData(searchData, prm, context);
       });
     } catch (e) {
       setState(() {
@@ -125,11 +123,11 @@ class _DetailScreenState extends State<DetailScreen> {
                     buildRow("Name", data["Name"] ?? "NULL"),
                     buildRow("Father Name", data["Father"] ?? "NULL"),
                     buildRow("Address", data["Address"] ?? "NULL"),
-                    buildRow("Registration No", widget.registration_no),
+                    buildRow("Registration No", data["Registration_No"]),
                     buildRow("Loan No", data["Loan_No"] ?? "NULL"),
                     buildRow("Asset", data["Asset"] ?? "NULL"),
                     buildRow("Engine No", data["Engine_No"] ?? "NULL"),
-                    buildRow("Chasiss No", widget.chasiss_no ?? "Null"),
+                    buildRow("Chasiss No", data["Chassis_No"] ?? "Null"),
                     buildRow("Bucket", data["Bucket"] ?? "NULL"),
                     buildRow("EMI Ammount", data["EMI_Ammount"] ?? "NULL"),
                     buildRow("Total Pos", data["Total_Pos"] ?? "NULL"),

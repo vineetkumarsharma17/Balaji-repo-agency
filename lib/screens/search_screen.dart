@@ -175,10 +175,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => DetailScreen(
-                                                registration_no: data[index]
-                                                    ["Registration_No"],
-                                                chasiss_no: data[index]
-                                                    ["Chassis_No"])));
+                                                data: data[index])));
                                   },
                                   child: Card(
                                     child: Padding(
@@ -205,12 +202,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           DetailScreen(
-                                                            registration_no: data2[
-                                                                    index][
-                                                                "Registration_No"],
-                                                            chasiss_no: data2[
-                                                                    index]
-                                                                ["Chassis_No"],
+                                                            data: data2[index],
                                                           )));
                                             },
                                             child: Card(

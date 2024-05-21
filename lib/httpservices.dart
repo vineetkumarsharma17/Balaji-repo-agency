@@ -13,15 +13,17 @@ class HttpService {
     int count = 0;
     String first = '';
     await http
-        .post(Uri.parse(apiLink + "getrecordcount.php"), body: null)
+        .get(
+      Uri.parse(apiLink + "getCount"),
+    )
         .then((res) {
       print("status code:" + res.statusCode.toString());
 
       if (res.statusCode == 200) {
         var obj = jsonDecode(res.body);
-
+        print(obj);
         if (obj["status"] == 1) {
-          count = int.parse(obj["count"]);
+          count = int.parse(obj["count"].toString());
           first = obj["first"];
           // print(count.toString());
           return {"count": count, "first": first};
@@ -39,34 +41,34 @@ class HttpService {
     return {"count": count, "first": first};
   }
 
-  static Future<Map> getDetail(context, String args) async {
-    Map prm = {"data": args};
-    Map data = {};
-    await http
-        .post(Uri.parse(apiLink + "getDetail.php"), body: jsonEncode(prm))
-        .then((res) {
-      print("status code:" + res.statusCode.toString());
+  // static Future<Map> getDetail(context, String args) async {
+  //   Map prm = {"data": args};
+  //   Map data = {};
+  //   await http
+  //       .post(Uri.parse(apiLink + "getDetail.php"), body: jsonEncode(prm))
+  //       .then((res) {
+  //     print("status code:" + res.statusCode.toString());
 
-      if (res.statusCode == 200) {
-        var obj = jsonDecode(res.body);
+  //     if (res.statusCode == 200) {
+  //       var obj = jsonDecode(res.body);
 
-        if (obj["status"] == 1) {
-          data = obj["data"][0];
-          print(data.toString());
-          return data;
-        }
-      } else {
-        return data;
-      }
-    }).timeout(const Duration(seconds: 34), onTimeout: () {
-      showSnackBar("Time out", context);
+  //       if (obj["status"] == 1) {
+  //         data = obj["data"][0];
+  //         print(data.toString());
+  //         return data;
+  //       }
+  //     } else {
+  //       return data;
+  //     }
+  //   }).timeout(const Duration(seconds: 34), onTimeout: () {
+  //     showSnackBar("Time out", context);
 
-      throw ("Error");
-    }).catchError((e) {
-      if (e is SocketException) showSnackBar("No internet connection", context);
-    });
-    return data;
-  }
+  //     throw ("Error");
+  //   }).catchError((e) {
+  //     if (e is SocketException) showSnackBar("No internet connection", context);
+  //   });
+  //   return data;
+  // }
 
   static Future<List?> getOnlineData(context, String reg) async {
     List? data = [];
@@ -105,16 +107,19 @@ class HttpService {
   static Future<void> fetchData(context, String limit) async {
     print("fetching data limit $limit");
     Map<String, dynamic> prm = {"id": limit};
-    await http
-        .post(Uri.parse(apiLink + "fetchData.php"), body: jsonEncode(prm))
-        .then((res) {
-      // print("status code:" + res.statusCode.toString());
-      // print("res:" + res.body.toString());
-      try {
+    try {
+      await http
+          .get(
+        Uri.parse(apiLink + "fetchData?userID=$limit"),
+      )
+          .then((res) {
+        print("status code:" + res.statusCode.toString());
+        print("res:" + res.body.toString());
+
         if (res.statusCode == 200) {
           var obj = json.decode(res.body);
           // print("status co" + obj["status"]);
-          if (obj["status"] == 1) {
+          if (obj["success"]) {
             // print("get data");
             List data = obj["data"];
             print("get record:" + data.length.toString());
@@ -122,18 +127,18 @@ class HttpService {
                 .then((value) => LocalStorage.checkCountAndFetchData());
           }
           // if (obj["status"] == 1) return int.parse(obj["count"]);
-
         }
-      } catch (e) {
-        print("Error in res:" + e.toString());
-      }
-    }).timeout(const Duration(seconds: 34), onTimeout: () {
-      showSnackBar("Time out", context);
+      }).timeout(const Duration(seconds: 34), onTimeout: () {
+        showSnackBar("Time out", context);
 
-      throw ("Error");
-    }).catchError((e) {
-      if (e is SocketException) showSnackBar("No internet connection", context);
-    });
+        throw ("Error");
+      }).catchError((e) {
+        if (e is SocketException)
+          showSnackBar("No internet connection", context);
+      });
+    } catch (e) {
+      print("Error in res:" + e.toString());
+    }
     return;
   }
 
